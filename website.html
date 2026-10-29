@@ -2832,44 +2832,52 @@ if ("IntersectionObserver" in window) {
     });
 }
 
+
 /* =========================
-   CONTACT FORM
+   CONTACT FORM — FORMSPREE
 ========================= */
 
-
-const contactForm = document.getElementById("contactForm");
-const submitButton = document.getElementById("submitButton");
 const formStatus = document.getElementById("formStatus");
 
-contactForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
+if (contactForm && submitButton && formStatus) {
+    contactForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Sending...";
-    formStatus.textContent = "";
+        submitButton.disabled = true;
+        submitButton.innerHTML = "Sending...";
+        formStatus.className = "form-status show";
+        formStatus.textContent = "Sending your message...";
 
-    try {
-        const response = await fetch(contactForm.action, {
-            method: "POST",
-            body: new FormData(contactForm),
-            headers: {
-                Accept: "application/json"
+        try {
+            const response = await fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (response.ok) {
+                formStatus.textContent = "Your message was sent successfully!";
+                formStatus.className = "form-status show";
+                contactForm.reset();
+            } else {
+                formStatus.textContent =
+                    "Unable to send your message. Please check your Formspree setup and try again.";
+                formStatus.className = "form-status show error";
             }
-        });
-
-        if (response.ok) {
-            formStatus.textContent = "Message sent successfully!";
-            contactForm.reset();
-        } else {
-            formStatus.textContent = "Failed to send. Please try again.";
+        } catch (error) {
+            formStatus.textContent =
+                "A connection error occurred. Please try again.";
+            formStatus.className = "form-status show error";
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML =
+                '<i class="fa-regular fa-paper-plane"></i> Send Message';
         }
-    } catch (error) {
-        formStatus.textContent = "Something went wrong. Please try again.";
-    } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Send Message";
-    }
-});
+    });
+}
+
 
 </script>
 
