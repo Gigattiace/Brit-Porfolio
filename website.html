@@ -2692,15 +2692,9 @@
     </footer>
 
     <!-- JAVASCRIPT -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-
-        const SUPABASE_URL = "https://fiwgpmxiidwcldzsgeie.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1M52wZE5wr3tP38-MTEqmw_MCbN6kEt";
-
-        const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
         "use strict";
 
         /* =========================
@@ -3301,79 +3295,339 @@ contactForm.addEventListener("submit", (event) => {
             true    
         );    
 
-        return;    
-    }    
 
-    if (name.length > 80) {    
-        showFormStatus(    
-            "Your name must be 80 characters or fewer.",    
-            true    
-        );    
+const navbar = document.getElementById("navbar");
+const scrollProgress = document.getElementById("scrollProgress");
 
-        return;    
-    }    
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
 
-    if (message.length > 2000) {    
-        showFormStatus(    
-            "Your message must be 2,000 characters or fewer.",    
-            true    
-        );    
+const navigationAnchors = document.querySelectorAll(
+    '.nav-links a[href^="#"]'
+);
 
-        return;    
-    }    
+const contactForm = document.getElementById("contactForm");
+const visitorName = document.getElementById("visitorName");
+const visitorMessage = document.getElementById("visitorMessage");
 
-    submitButton.disabled = true;    
+const formStatus = document.getElementById("formStatus");
+const submitButton = document.getElementById("submitButton");
 
-    const originalButtonContent = submitButton.innerHTML;    
+const currentYear = document.getElementById("currentYear");
 
-    submitButton.innerHTML =    
-        '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';    
+/* =========================
+   SUPABASE CONFIGURATION
+========================= */
 
-    const messages = getSavedMessages();    
+const SUPABASE_URL =
+    "https://fiwgpmxiidwcldzsgeie.supabase.co";
 
-    const newMessage = {    
-        name: name,    
-        message: message,    
-        date: new Date().toISOString()    
-    };    
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_1M52wZE5wr3tP38-MTEqmw_MCbN6kEt";
 
-    messages.unshift(newMessage);    
+// Prevent a missing CDN library from stopping the other website features.
+const supabaseClient = window.supabase?.createClient
+    ? window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    )
+    : null;
 
-    const savedSuccessfully = saveMessages(messages);    
+/* =========================
+   FOOTER YEAR
+========================= */
 
-    submitButton.disabled = false;    
-    submitButton.innerHTML = originalButtonContent;    
+if (currentYear) {
+    currentYear.textContent = new Date().getFullYear();
+}
 
-    if (!savedSuccessfully) {    
-        showFormStatus(    
-            "Unable to save this message. Check your browser's storage settings and available space.",    
-            true    
-        );    
+/* =========================
+   MOBILE NAVIGATION
+========================= */
 
-        return;    
-    }    
+function closeMobileMenu() {
+    if (!navLinks || !menuToggle) return;
 
-    contactForm.reset();    
+    navLinks.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Open navigation menu");
+    menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+}
 
-    showFormStatus(    
-        "Your message was saved in this browser successfully."    
-    );    
+if (menuToggle && navLinks) {
+    menuToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
 
-    renderMessages();    
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "Close navigation menu" : "Open navigation menu"
+        );
 
-    // Scroll to the records so the new entry is visible.    
-    document.getElementById("messages").scrollIntoView({    
-        behavior: "smooth",    
-        block: "start"    
-    });    
-});    
+        menuToggle.innerHTML = isOpen
+            ? '<i class="fa-solid fa-xmark"></i>'
+            : '<i class="fa-solid fa-bars"></i>';
+    });
 
-/* =========================    
-   INITIALIZE WEBSITE    
-   No clear-all functionality    
-========================= */    
+    navigationAnchors.forEach((link) => {
+        link.addEventListener("click", closeMobileMenu);
+    });
 
-renderMessages();
+    document.addEventListener("click", (event) => {
+        if (
+            !navLinks.contains(event.target) &&
+            !menuToggle.contains(event.target)
+        ) {
+            closeMobileMenu();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeMobileMenu();
+        }
+    });
+}
+
+/* =========================
+   SCROLL EFFECTS
+========================= */
+
+function updateScrollEffects() {
+    const scrollTop =
+        window.scrollY ||
+        document.documentElement.scrollTop;
+
+    const scrollableHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+
+    const progress = scrollableHeight > 0
+        ? (scrollTop / scrollableHeight) * 100
+        : 0;
+
+    if (scrollProgress) {
+        scrollProgress.style.width = `${progress}%`;
+    }
+
+    if (navbar) {
+        navbar.classList.toggle("scrolled", scrollTop > 30);
+    }
+}
+
+window.addEventListener("scroll", updateScrollEffects, {
+    passive: true
+});
+
+updateScrollEffects();
+
+/* =========================
+   ACTIVE NAVIGATION LINK
+========================= */
+
+const observedSections = document.querySelectorAll(
+    "main section[id]"
+);
+
+if ("IntersectionObserver" in window) {
+    const sectionObserver = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                const currentId = entry.target.id;
+
+                navigationAnchors.forEach((link) => {
+                    const isActive =
+                        link.getAttribute("href") === `#${currentId}`;
+
+                    link.classList.toggle("active", isActive);
+                });
+            });
+        },
+        {
+            rootMargin: "-35% 0px -55% 0px",
+            threshold: 0
+        }
+    );
+
+    observedSections.forEach((section) => {
+        sectionObserver.observe(section);
+    });
+}
+
+/* =========================
+   SCROLL REVEAL ANIMATION
+========================= */
+
+const revealElements = document.querySelectorAll(".reveal");
+
+if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+    revealElements.forEach((element) => {
+        revealObserver.observe(element);
+    });
+} else {
+    revealElements.forEach((element) => {
+        element.classList.add("visible");
+    });
+}
+
+/* =========================
+   SKILL BAR ANIMATION
+========================= */
+
+const skillFills = document.querySelectorAll(".skill-fill");
+
+if ("IntersectionObserver" in window) {
+    const skillsObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animate");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.4
+        }
+    );
+
+    skillFills.forEach((fill) => {
+        skillsObserver.observe(fill);
+    });
+} else {
+    skillFills.forEach((fill) => {
+        fill.classList.add("animate");
+    });
+}
+
+/* =========================
+   MESSAGE STATUS
+========================= */
+
+function showFormStatus(message, isError = false) {
+    if (!formStatus) return;
+
+    formStatus.textContent = message;
+    formStatus.classList.add("show");
+    formStatus.classList.toggle("error", isError);
+}
+
+/* =========================
+   SUBMIT CONTACT FORM TO SUPABASE
+========================= */
+
+if (contactForm) {
+    contactForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const name = visitorName?.value.trim() || "";
+        const message = visitorMessage?.value.trim() || "";
+
+        if (!name || !message) {
+            showFormStatus(
+                "Please enter your name and a message.",
+                true
+            );
+            return;
+        }
+
+        if (name.length > 80) {
+            showFormStatus(
+                "Your name must be 80 characters or fewer.",
+                true
+            );
+            return;
+        }
+
+        if (message.length > 2000) {
+            showFormStatus(
+                "Your message must be 2,000 characters or fewer.",
+                true
+            );
+            return;
+        }
+
+        if (!supabaseClient) {
+            showFormStatus(
+                "The online message service did not load. Please refresh and try again.",
+                true
+            );
+            console.error(
+                "Supabase library unavailable. Check the CDN script above the main script."
+            );
+            return;
+        }
+
+        if (!submitButton) {
+            showFormStatus(
+                "The submit button could not be found. Please contact the site owner.",
+                true
+            );
+            return;
+        }
+
+        const originalButtonContent = submitButton.innerHTML;
+
+        submitButton.disabled = true;
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+        try {
+            const { error } = await supabaseClient
+                .from("contact_messages")
+                .insert([
+                    {
+                        name: name,
+                        message: message
+                    }
+                ]);
+
+            if (error) {
+                console.error("Supabase save error:", error);
+
+                showFormStatus(
+                    "Unable to save your message online. Please try again.",
+                    true
+                );
+                return;
+            }
+
+            contactForm.reset();
+
+            showFormStatus(
+                "Your message was saved successfully. Thank you!"
+            );
+
+        } catch (error) {
+            console.error("Unexpected submission error:", error);
+
+            showFormStatus(
+                "Connection error. Please check your internet and try again.",
+                true
+            );
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonContent;
+        }
+    });
+}
+
 
 
     </script>
