@@ -2692,7 +2692,15 @@
     </footer>
 
     <!-- JAVASCRIPT -->
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+
+        const SUPABASE_URL = "https://fiwgpmxiidwcldzsgeie.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1M52wZE5wr3tP38-MTEqmw_MCbN6kEt";
+
+        const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
         "use strict";
 
         /* =========================
@@ -3035,95 +3043,85 @@
             });
         }
 
-        /* =========================
-           SUBMIT CONTACT FORM
-        ========================= */
+        
+/* =========================
+   MESSAGE STATUS
+========================= */
 
-        contactForm.addEventListener("submit", (event) => {
-            event.preventDefault();
+function showFormStatus(message, isError = false) {
+    formStatus.textContent = message;
+    formStatus.classList.add("show");
+    formStatus.classList.toggle("error", isError);
+}
 
-            const name = visitorName.value.trim();
-            const message = visitorMessage.value.trim();
+/* =========================
+   SUBMIT CONTACT FORM TO SUPABASE
+========================= */
 
-            if (!name || !message) {
-                showFormStatus(
-                    "Please enter your name and a message.",
-                    true
-                );
+contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-                return;
-            }
+    const name = visitorName.value.trim();
+    const message = visitorMessage.value.trim();
 
-            if (name.length > 80) {
-                showFormStatus(
-                    "Your name must be 80 characters or fewer.",
-                    true
-                );
+    if (!name || !message) {
+        showFormStatus("Please enter your name and a message.", true);
+        return;
+    }
 
-                return;
-            }
+    if (name.length > 80) {
+        showFormStatus("Your name must be 80 characters or fewer.", true);
+        return;
+    }
 
-            if (message.length > 2000) {
-                showFormStatus(
-                    "Your message must be 2,000 characters or fewer.",
-                    true
-                );
+    if (message.length > 2000) {
+        showFormStatus(
+            "Your message must be 2,000 characters or fewer.",
+            true
+        );
+        return;
+    }
 
-                return;
-            }
+    const originalButtonContent = submitButton.innerHTML;
 
-            submitButton.disabled = true;
+    submitButton.disabled = true;
+    submitButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
-            const originalButtonContent = submitButton.innerHTML;
+    try {
+        const { error } = await supabaseClient
+            .from("contact_messages")
+            .insert([{ name, message }]);
 
-            submitButton.innerHTML =
-                '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-
-            const messages = getSavedMessages();
-
-            const newMessage = {
-                name: name,
-                message: message,
-                date: new Date().toISOString()
-            };
-
-            messages.unshift(newMessage);
-
-            const savedSuccessfully = saveMessages(messages);
-
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonContent;
-
-            if (!savedSuccessfully) {
-                showFormStatus(
-                    "Unable to save this message. Check your browser's storage settings and available space.",
-                    true
-                );
-
-                return;
-            }
-
-            contactForm.reset();
+        if (error) {
+            console.error("Supabase save error:", error);
 
             showFormStatus(
-                "Your message was saved in this browser successfully."
+                "Unable to save your message online. Please try again.",
+                true
             );
+            return;
+        }
 
-            renderMessages();
+        contactForm.reset();
 
-            // Scroll to the records so the new entry is visible.
-            document.getElementById("messages").scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        });
+        showFormStatus(
+            "Your message was saved successfully. Thank you!"
+        );
 
-        /* =========================
-           INITIALIZE WEBSITE
-           No clear-all functionality
-        ========================= */
+    } catch (error) {
+        console.error("Connection error:", error);
 
-        renderMessages();
+        showFormStatus(
+            "Connection error. Please check your internet and try again.",
+            true
+        );
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonContent;
+    }
+});
+
 
     </script>
 
