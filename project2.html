@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d1b">
+
+    <title>Project 02 | AnimeVerse × MangaVerse × GameVerse</title>
+    <meta name="description"
+        content="Explore my favorite anime, manga, manhwa, and video games in one digital library.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #080d1b;
+            --card: #111b31;
+            --blue: #60a5fa;
+            --cyan: #67e8f9;
+            --purple: #a78bfa;
+            --text: #f1f5f9;
+            --muted: #a3b1c6;
+            --border: rgba(148, 163, 184, 0.18);
+            --danger: #fb7185;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 10% 5%, rgba(59, 130, 246, .16), transparent 35%),
+                radial-gradient(ellipse at 90% 25%, rgba(167, 139, 250, .13), transparent 32%),
+                var(--bg);
+            font-family: "Inter", sans-serif;
+            line-height: 1.65;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 90%);
+            margin-inline: auto;
+        }
+
+        .gradient {
+            color: transparent;
+            background: linear-gradient(100deg, var(--blue), var(--cyan), var(--purple));
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        /* NAVIGATION */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(8, 13, 27, .91);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+        }
+
+        nav {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: .4px;
+        }
+
+        .logo i {
+            color: var(--cyan);
+            margin-right: 7px;
+        }
+
+        .logo span {
+            color: var(--cyan);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--muted);
+            font-size: .9rem;
+            font-weight: 700;
+            transition: color .2s;
+        }
+
+        .back-link:hover {
+            color: var(--cyan);
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 80px 0 48px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: var(--cyan);
+            font-family: "Orbitron", sans-serif;
+            font-size: .73rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: clamp(2.25rem, 6.5vw, 4.7rem);
+            line-height: 1.13;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 0 auto 28px;
+            color: var(--muted);
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 12px 19px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: #07101f;
+            background: linear-gradient(120deg, var(--blue), var(--cyan));
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, .25);
+        }
+
+        .button-outline {
+            color: var(--text);
+            border-color: var(--border);
+            background: rgba(17, 27, 49, .7);
+        }
+
+        .button-outline:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: none;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+            margin: 15px 0 35px;
+        }
+
+        .stat {
+            padding: 19px 12px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(17, 27, 49, .65);
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+            color: var(--cyan);
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.55rem;
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-size: .82rem;
+        }
+
+        /* LIBRARY */
+
+        section {
+            padding: 35px 0;
+        }
+
+        .section-heading {
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 7px;
+            font-size: clamp(1.7rem, 4vw, 2.35rem);
+        }
+
+        .section-heading p {
+            color: var(--muted);
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 15px;
+            margin-bottom: 17px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            padding: 0 15px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(17, 27, 49, .85);
+        }
+
+        .search-box i {
+            color: var(--cyan);
+        }
+
+        .search-box input {
+            width: 100%;
+            min-width: 0;
+            padding: 13px 0;
+            border: none;
+            outline: none;
+            color: var(--text);
+            background: transparent;
+        }
+
+        .search-box input::placeholder {
+            color: #8292aa;
+        }
+
+        .result-count {
+            align-self: center;
+            color: var(--muted);
+            font-size: .85rem;
+            white-space: nowrap;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-bottom: 27px;
+        }
+
+        .filter-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: var(--muted);
+            background: var(--card);
+            font-size: .88rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .filter-button:hover,
+        .filter-button.active {
+            color: #07101f;
+            border-color: var(--cyan);
+            background: var(--cyan);
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        /* TITLE CARDS */
+
+        .catalog-card {
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: rgba(17, 27, 49, .88);
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+
+        .catalog-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(103, 232, 249, .55);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, .2);
+        }
+
+        .cover {
+            position: relative;
+            display: grid;
+            height: 250px;
+            overflow: hidden;
+            place-items: center;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(96, 165, 250, .35), transparent 45%),
+                linear-gradient(145deg, #172554, #171033);
+        }
+
+        .cover.purple {
+            background:
+                radial-gradient(circle at 70% 20%, rgba(167, 139, 250, .42), transparent 45%),
+                linear-gradient(145deg, #2e1065, #111827);
+        }
+
+        .cover.cyan {
+            background:
+                radial-gradient(circle at 50% 25%, rgba(103, 232, 249, .35), transparent 45%),
+                linear-gradient(145deg, #083344, #172554);
+        }
+
+        .cover img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            transition: transform .35s;
+        }
+
+        .catalog-card:hover .cover img {
+            transform: scale(1.04);
+        }
+
+        .cover-fallback {
+            display: none;
+            padding: 20px;
+            color: rgba(255, 255, 255, .9);
+            text-align: center;
+        }
+
+        .cover-fallback i {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--cyan);
+            font-size: 3rem;
+        }
+
+        .cover-fallback span {
+            display: block;
+            font-family: "Orbitron", sans-serif;
+            font-size: .8rem;
+            overflow-wrap: anywhere;
+        }
+
+        .cover.has-no-image .cover-fallback {
+            display: block;
+        }
+
+        .cover.has-no-image img {
+            display: none;
+        }
+
+        .type-badge {
+            position: absolute;
+            top: 11px;
+            left: 11px;
+            z-index: 2;
+            padding: 5px 9px;
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 7px;
+            color: white;
+            background: rgba(8, 13, 27, .78);
+            font-size: .68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            backdrop-filter: blur(8px);
+        }
+
+        .favorite-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 50%;
+            color: white;
+            background: rgba(8, 13, 27, .8);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .favorite-button:hover {
+            transform: scale(1.08);
+            border-color: var(--danger);
+        }
+
+        .favorite-button.is-favorite {
+            color: var(--danger);
+            border-color: rgba(251, 113, 133, .5);
+        }
+
+        .card-info {
+            padding: 16px;
+        }
+
+        .card-info h3 {
+            margin-bottom: 7px;
+            font-size: 1rem;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 13px;
+            color: var(--muted);
+            font-size: .77rem;
+        }
+
+        .genre {
+            display: inline-block;
+            max-width: 100%;
+            padding: 4px 8px;
+            border: 1px solid rgba(103, 232, 249, .2);
+            border-radius: 6px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .06);
+            overflow-wrap: anywhere;
+        }
+
+        .card-info p {
+            min-height: 64px;
+            margin-bottom: 15px;
+            color: var(--muted);
+            font-size: .83rem;
+        }
+
+        .details-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0;
+            border: none;
+            color: var(--cyan);
+            background: transparent;
+            font-size: .87rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .details-button:hover {
+            color: white;
+        }
+
+        .empty-state {
+            display: none;
+            padding: 50px 20px;
+            border: 1px dashed var(--border);
+            border-radius: 15px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .empty-state i {
+            display: block;
+            margin-bottom: 15px;
+            color: var(--cyan);
+            font-size: 2.5rem;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 7px;
+            color: var(--text);
+        }
+
+        /* ABOUT */
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .panel {
+            padding: 23px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: rgba(17, 27, 49, .78);
+        }
+
+        .panel h3 {
+            margin-bottom: 10px;
+        }
+
+        .panel h3 i {
+            margin-right: 8px;
+            color: var(--cyan);
+        }
+
+        .panel p {
+            color: var(--muted);
+            font-size: .92rem;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 16px;
+        }
+
+        .tech {
+            padding: 6px 10px;
+            border: 1px solid rgba(103, 232, 249, .2);
+            border-radius: 7px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .06);
+            font-size: .8rem;
+        }
+
+        .closing {
+            margin: 45px 0 65px;
+            padding: 32px 20px;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 17px;
+            background: linear-gradient(120deg, rgba(59, 130, 246, .1), rgba(167, 139, 250, .07));
+            text-align: center;
+        }
+
+        .closing h2 {
+            margin-bottom: 10px;
+        }
+
+        .closing p {
+            max-width: 650px;
+            margin: 0 auto 20px;
+            color: var(--muted);
+        }
+
+        footer {
+            padding: 24px 5%;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: .82rem;
+        }
+
+        /* DETAILS MODAL */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(3, 7, 18, .82);
+            backdrop-filter: blur(9px);
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(170px, .8fr) minmax(0, 1.2fr);
+            width: min(760px, 100%);
+            max-height: 85vh;
+            overflow: auto;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 17px;
+            background: #0e172a;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, .45);
+        }
+
+        .modal-cover {
+            min-height: 310px;
+            background: linear-gradient(145deg, #172554, #171033);
+        }
+
+        .modal-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 310px;
+            object-fit: cover;
+        }
+
+        .modal-text {
+            padding: 30px;
+        }
+
+        .modal-text h2 {
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .modal-text p {
+            margin: 17px 0;
+            color: var(--muted);
+            font-size: .92rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            display: grid;
+            width: 37px;
+            height: 37px;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: white;
+            background: rgba(8, 13, 27, .88);
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 1000px) {
+            .catalog-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .cover {
+                height: 240px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .catalog-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
+
+            .cover {
+                height: 225px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                grid-template-columns: 1fr;
+                width: min(430px, 100%);
+            }
+
+            .modal-cover {
+                height: 220px;
+                min-height: 220px;
+            }
+
+            .modal-cover img {
+                height: 220px;
+                min-height: 220px;
+            }
+
+            .modal-text {
+                padding: 23px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 92%;
+            }
+
+            nav {
+                min-height: 66px;
+            }
+
+            .logo {
+                font-size: .85rem;
+            }
+
+            .back-link {
+                gap: 5px;
+                font-size: .75rem;
+            }
+
+            .hero {
+                padding-top: 58px;
+            }
+
+            h1 {
+                letter-spacing: -1px;
+            }
+
+            .stats {
+                gap: 8px;
+            }
+
+            .stat {
+                padding: 13px 6px;
+            }
+
+            .stat strong {
+                font-size: 1.2rem;
+            }
+
+            .stat span {
+                font-size: .7rem;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .result-count {
+                justify-self: start;
+            }
+
+            .filters {
+                gap: 7px;
+            }
+
+            .filter-button {
+                padding: 8px 10px;
+                font-size: .78rem;
+            }
+
+            .cover {
+                height: 190px;
+            }
+
+            .card-info {
+                padding: 12px;
+            }
+
+            .card-info h3 {
+                font-size: .9rem;
+            }
+
+            .card-info p {
+                min-height: 0;
+                font-size: .78rem;
+            }
+
+            .card-meta {
+                font-size: .7rem;
+            }
+
+            .type-badge {
+                top: 8px;
+                left: 8px;
+                padding: 4px 6px;
+                font-size: .6rem;
+            }
+
+            .favorite-button {
+                top: 7px;
+                right: 7px;
+                width: 31px;
+                height: 31px;
+            }
+
+            .details-button {
+                font-size: .8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a class="logo" href="project2.html">
+                <i class="fa-solid fa-compact-disc"></i>
+                MY <span>VERSE</span>
+            </a>
+
+            <a class="back-link" href="website.html">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- HERO -->
+        <section class="hero">
+            <span class="eyebrow">Project 02 / My Personal Library</span>
+
+            <h1>
+                Welcome to My
+                <span class="gradient">Digital Universe</span>
+            </h1>
+
+            <p>
+                One place for the anime I watch, the manga and manhwa I read,
+                and the games I enjoy. Explore the collection, search for a
+                title, and save your favorites.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#library" class="button">
+                    <i class="fa-solid fa-compass"></i>
+                    Explore Library
+                </a>
+
+                <button class="button button-outline" id="showFavorites">
+                    <i class="fa-solid fa-heart"></i>
+                    My Favorites
+                </button>
+            </div>
+        </section>
+
+        <!-- COUNTS -->
+        <div class="stats">
+            <div class="stat">
+                <strong id="animeCount">0</strong>
+                <span>Anime Titles</span>
+            </div>
+
+            <div class="stat">
+                <strong id="mangaCount">0</strong>
+                <span>Manga & Manhwa</span>
+            </div>
+
+            <div class="stat">
+                <strong id="gameCount">0</strong>
+                <span>Video Games</span>
+            </div>
+        </div>
+
+        <!-- LIBRARY -->
+        <section id="library">
+            <div class="section-heading">
+                <span class="eyebrow">01 / The Collection</span>
+                <h2>Explore the <span class="gradient">Library</span></h2>
+                <p>
+                    Search the titles below or select a category to explore.
+                    Click a card to see more information.
+                </p>
+            </div>
+
+            <div class="toolbar">
+                <label class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="searchInput" placeholder="Search titles or genres..."
+                        aria-label="Search library">
+                </label>
+
+                <span class="result-count" id="resultCount">0 titles</span>
+            </div>
+
+            <div class="filters" aria-label="Library categories">
+                <button class="filter-button active" data-filter="all">
+                    <i class="fa-solid fa-layer-group"></i> All
+                </button>
+
+                <button class="filter-button" data-filter="anime">
+                    <i class="fa-solid fa-tv"></i> Anime
+                </button>
+
+                <button class="filter-button" data-filter="manga">
+                    <i class="fa-solid fa-book-open"></i> Manga
+                </button>
+
+                <button class="filter-button" data-filter="games">
+                    <i class="fa-solid fa-gamepad"></i> Games
+                </button>
+
+                <button class="filter-button" data-filter="favorites">
+                    <i class="fa-solid fa-heart"></i> Favorites
+                </button>
+            </div>
+
+            <div class="catalog-grid" id="catalogGrid"></div>
+
+            <div class="empty-state" id="emptyState">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h3>No titles found</h3>
+                <p>Try another search or choose a different category.</p>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <div class="section-heading">
+                <span class="eyebrow">02 / About This Project</span>
+                <h2>My <span class="gradient">Digital Universe</span></h2>
+                <p>A personal catalog inspired by the things I enjoy.</p>
+            </div>
+
+            <div class="about-grid">
+                <article class="panel">
+                    <h3><i class="fa-solid fa-book-open"></i> Anime & Manga</h3>
+                    <p>
+                        This section collects some of my favorite anime,
+                        manga, and manhwa titles. It includes series such
+                        as K-On!, Yuru Camp, Grand Blue, and Kaoru Hana wa
+                        Rin to Saku.
+                    </p>
+                </article>
+
+                <article class="panel">
+                    <h3><i class="fa-solid fa-gamepad"></i> Gaming</h3>
+                    <p>
+                        The gaming section includes titles I enjoy or want
+                        to feature, including Minecraft, VALORANT, Genshin
+                        Impact, Roblox, Blood Strike, and Elden Ring.
+                    </p>
+                </article>
+
+                <article class="panel">
+                    <h3><i class="fa-solid fa-heart"></i> Favorites</h3>
+                    <p>
+                        Use the heart button on a card to save a title.
+                        Favorites are stored in your browser so they can
+                        remain available after you close or refresh the page.
+                    </p>
+                </article>
+
+                <article class="panel">
+                    <h3><i class="fa-solid fa-code"></i> Technologies</h3>
+                    <p>
+                        This project uses HTML for structure, CSS for the
+                        visual design, and JavaScript for searching,
+                        filtering, the details popup, and saved favorites.
+                    </p>
+
+                    <div class="tech-list">
+                        <span class="tech">HTML</span>
+                        <span class="tech">CSS</span>
+                        <span class="tech">JavaScript</span>
+                        <span class="tech">Responsive Design</span>
+                        <span class="tech">localStorage</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <div class="closing">
+            <h2>Thanks for Exploring My <span class="gradient">Universe!</span></h2>
+            <p>
+                This is a personal web development project that brings
+                together my interests in anime, manga, and gaming.
+            </p>
+
+            <a class="button" href="website.html">
+                <i class="fa-solid fa-arrow-left"></i>
+                Return to My Portfolio
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            &copy; <span id="year"></span> Hillary Ace P. Brit.
+            AnimeVerse × MangaVerse × GameVerse.
+        </p>
+    </footer>
+
+    <!-- DETAILS POPUP -->
+    <div class="modal" id="detailsModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close details">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-cover" id="modalCover"></div>
+
+            <div class="modal-text">
+                <span class="eyebrow" id="modalType">Details</span>
+                <h2 id="modalTitle">Title</h2>
+                <span class="genre" id="modalGenre">Genre</span>
+                <p id="modalDescription"></p>
+
+                <button class="button" id="modalFavorite">
+                    <i class="fa-regular fa-heart"></i>
+                    Add to Favorites
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================
+        // CATALOG DATA
+        // These are the named titles from your Project 1 list.
+        // =====================================================
+
+        const catalog = [
+            // ANIME
+            {
+                id: "a1",
+                title: "Do It Yourself!!",
+                category: "anime",
+                genre: "Slice of Life",
+                year: "2022",
+                image: "https://static1.cbrimages.com/wordpress/wp-content/uploads/sharedimages/2024/12/do-it-yourself-poster.jpg",
+                icon: "fa-tv",
+                description: "A slice-of-life anime about a group of students learning DIY projects, making things by hand, and building friendships."
+            },
+            {
+                id: "a2",
+                title: "Hibike! Euphonium",
+                category: "anime",
+                genre: "Music / Drama",
+                year: "2015",
+                image: "https://tse2.mm.bing.net/th/id/OIP.BvlQ9jVCmy6uVp85zvnUNgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                icon: "fa-music",
+                description: "A music-focused school drama following students in a concert band as they practice, compete, and grow together."
+            },
+            {
+                id: "a3",
+                title: "Non Non Biyori",
+                category: "anime",
+                genre: "Slice of Life",
+                year: "2013",
+                image: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx17549-ROdV36u4nWkU.png",
+                icon: "fa-leaf",
+                description: "A relaxed countryside slice-of-life series about the everyday adventures of a small group of students."
+            },
+            {
+                id: "a4",
+                title: "K-On!",
+                category: "anime",
+                genre: "Music / Comedy",
+                year: "2009",
+                image: "https://cdn.myanimelist.net/images/anime/10/76120l.jpg",
+                icon: "fa-music",
+                description: "A comedy and music series about school friends who join a light music club and spend time practicing, performing, and hanging out."
+            },
+            {
+                id: "a5",
+                title: "Ouran High School Host Club",
+                category: "anime",
+                genre: "Comedy / Romance",
+                year: "2006",
+                image: "https://cdn.myanimelist.net/images/anime/2/71992l.jpg",
+                icon: "fa-users",
+                description: "A romantic comedy about a student who becomes involved with the unusual host club at an elite school."
+            },
+            {
+                id: "a6",
+                title: "Yuru Camp",
+                category: "anime",
+                genre: "Slice of Life",
+                year: "2018",
+                image: "https://cdn.myanimelist.net/images/anime/4/89877l.jpg",
+                icon: "fa-campground",
+                description: "A cozy series about camping trips, scenic outdoor locations, food, and the friendships formed along the way."
+            },
+            {
+                id: "a7",
+                title: "Chuunibyou demo Koi ga Shitai!",
+                category: "anime",
+                genre: "Romance / Comedy",
+                year: "2012",
+                image: "https://cdn.myanimelist.net/images/anime/12/46931l.jpg",
+                icon: "fa-star",
+                description: "A romantic comedy about students dealing with embarrassing fantasies, friendship, and growing up."
+            },
+            {
+                id: "a8",
+                title: "Seitokai Yakuindomo",
+                category: "anime",
+                genre: "School / Comedy",
+                year: "2010",
+                image: "https://cdn.myanimelist.net/images/anime/10/75195l.jpg",
+                icon: "fa-school",
+                description: "A school comedy following the student council and its unusual conversations and everyday situations."
+            },
+            {
+                id: "a9",
+                title: "Uma Musume",
+                category: "anime",
+                genre: "Sports / Drama",
+                year: "2018",
+                image: "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2025/07/umamusume-pretty-derby-tag-page-cover-art.jpg",
+                icon: "fa-horse",
+                description: "A sports and racing series featuring horse-girl characters who train, compete, and pursue their dreams."
+            },
+
+            // MANGA AND MANHWA
+            {
+                id: "m1",
+                title: "The Prize of Youth",
+                category: "manga",
+                genre: "Drama",
+                year: "—",
+                image: "https://tse4.mm.bing.net/th/id/OIP.fGwLb_GBqlSxRE2HXLzJogAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                icon: "fa-book-open",
+                description: "A title from your original list. A cover image and more detailed series information can be added once the exact edition or series is confirmed."
+            },
+            {
+                id: "m2",
+                title: "Grand Blue",
+                category: "manga",
+                genre: "Comedy",
+                year: "2014",
+                image: "https://cdn.myanimelist.net/images/manga/2/166124l.jpg",
+                icon: "fa-water",
+                description: "A comedy manga centered on college life, a diving club, friendships, and chaotic adventures."
+            },
+            {
+                id: "m3",
+                title: "The Girl I Like Forgot Her Glasses",
+                category: "manga",
+                genre: "Romance / Comedy",
+                year: "2018",
+                image: "https://imgsrv.crunchyroll.com/cdn-cgi/image/fit=contain,format=auto,quality=85,width=480,height=720/catalog/crunchyroll/61eff1385c6b64a1110708ca3e0f4fb3.jpe",
+                icon: "fa-glasses",
+                description: "A romantic comedy about a boy whose feelings grow as he helps the girl he likes when she forgets her glasses."
+            },
+            {
+                id: "m4",
+                title: "Odd Girl Out",
+                category: "manga",
+                genre: "Drama / Friendship",
+                year: "2015",
+                image: "https://cdn.shopify.com/s/files/1/1074/9876/files/Girls-World2.jpg?v=1627605498",
+                icon: "fa-users",
+                description: "A coming-of-age story about friendship, school life, relationships, and learning to understand yourself and other people."
+            },
+            {
+                id: "m5",
+                title: "I'll Be the Matriarch in This Life",
+                category: "manga",
+                genre: "Fantasy / Drama",
+                year: "2021",
+                image: "https://i.redd.it/4wu2zwfmtde81.jpg",
+                icon: "fa-crown",
+                description: "A fantasy regression story about a young woman who uses her knowledge of the future to change her family's destiny."
+            },
+            {
+                id: "m6",
+                title: "Akebi's Sailor Uniform",
+                category: "manga",
+                genre: "Slice of Life",
+                year: "2016",
+                image: "https://m.media-amazon.com/images/I/919CIDD4SbL._RI_.jpg",
+                icon: "fa-school",
+                description: "A school-life manga following Akebi as she experiences friendships, school activities, and everyday moments."
+            },
+            {
+                id: "m7",
+                title: "Dignity Proof",
+                category: "manga",
+                genre: "Drama",
+                year: "—",
+                image: "https://tse3.mm.bing.net/th/id/OIP.ZsZQJyOw3krtl7dQ2MtU0AAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                icon: "fa-book",
+                description: "A title from your original list. The exact series details and cover can be added after confirming the specific title."
+            },
+            {
+                id: "m8",
+                title: "Witch Hat Atelier",
+                category: "manga",
+                genre: "Fantasy / Adventure",
+                year: "2016",
+                image: "https://animehunch.com/wp-content/uploads/2024/07/Witch-hat-atelier.jpg",
+                icon: "fa-hat-wizard",
+                description: "A fantasy manga about Coco, a girl who discovers the secrets of magic and begins learning from a witch."
+            },
+            {
+                id: "m9",
+                title: "Kaoru Hana wa Rin to Saku",
+                category: "manga",
+                genre: "Romance / School",
+                year: "2021",
+                image: "https://static.wikia.nocookie.net/kaoruhana/images/e/ee/Volume_1_EN_Cover.jpg/revision/latest/scale-to-width-down/267?cb=20240927182643",
+                icon: "fa-heart",
+                description: "A romance manga about two students from very different school environments who gradually grow closer."
+            },
+
+            // GAMES
+            {
+                id: "g1",
+                title: "Minecraft",
+                category: "games",
+                genre: "Sandbox / Survival",
+                year: "2011",
+                image: "https://tse4.mm.bing.net/th/id/OIP.0L9oSnoLyNKnqNE4jLTUBAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                icon: "fa-cubes",
+                description: "A sandbox game about exploring worlds, gathering resources, crafting items, building structures, and surviving."
+            },
+            {
+                id: "g2",
+                title: "VALORANT",
+                category: "games",
+                genre: "Tactical Shooter",
+                year: "2020",
+                image: "https://www.talkesport.com/wp-content/uploads/Valorant-13.09-Balance-Notes-Leaked-1-1067x601.webp",
+                icon: "fa-crosshairs",
+                description: "A competitive tactical shooter featuring agents with unique abilities and teams competing in objective-based rounds."
+            },
+            {
+                id: "g3",
+                title: "Genshin Impact",
+                category: "games",
+                genre: "Action RPG",
+                year: "2020",
+                image: "https://1.bp.blogspot.com/-8HUeyT_cjvU/X4IQ0HCk6WI/AAAAAAAAFq8/3Exl_8hFdAcagGAc33r23e9ECuagePy4QCNcBGAsYHQ/s1920/Genshin_Impact_Key_Art-EN.jpg",
+                icon: "fa-wand-sparkles",
+                description: "An open-world action RPG featuring exploration, elemental combat, quests, and a large cast of characters."
+            },
+            {
+                id: "g4",
+                title: "Roblox",
+                category: "games",
+                genre: "Online Platform",
+                year: "2006",
+                image: "https://tse3.mm.bing.net/th/id/OIP.xy2sbi3D-bUPngUO8AGwxAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                icon: "fa-cubes-stacked",
+                description: "An online platform where players can explore experiences created by other users and build their own games."
+            },
+            {
+                id: "g5",
+                title: "Blood Strike",
+                category: "games",
+                genre: "Battle Royale / FPS",
+                year: "2023",
+                image: "https://wallpaperaccess.com/full/21192066.png",
+                icon: "fa-crosshairs",
+                description: "A fast-paced first-person shooter featuring competitive matches, different characters, and battle royale gameplay."
+            },
+            {
+                id: "g6",
+                title: "Elden Ring",
+                category: "games",
+                genre: "Action RPG",
+                year: "2022",
+                image: "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg",
+                icon: "fa-dragon",
+                description: "A fantasy action RPG set in a vast world filled with exploration, challenging enemies, mysterious characters, and powerful bosses."
+            }
+        ];
+
+        // =====================================================
+        // ELEMENTS AND STATE
+        // =====================================================
+
+        const catalogGrid = document.getElementById("catalogGrid");
+        const searchInput = document.getElementById("searchInput");
+        const resultCount = document.getElementById("resultCount");
+        const emptyState = document.getElementById("emptyState");
+        const filterButtons = document.querySelectorAll(".filter-button");
+
+        const modal = document.getElementById("detailsModal");
+        const modalCover = document.getElementById("modalCover");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalType = document.getElementById("modalType");
+        const modalGenre = document.getElementById("modalGenre");
+        const modalDescription = document.getElementById("modalDescription");
+        const modalFavorite = document.getElementById("modalFavorite");
+
+        let activeFilter = "all";
+        let activeModalItem = null;
+
+        // Load saved favorites safely.
+        function loadFavorites() {
+            try {
+                const saved = JSON.parse(
+                    localStorage.getItem("myVerseFavorites") || "[]"
+                );
+
+                return Array.isArray(saved) ? saved : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        let favorites = loadFavorites();
+
+        function saveFavorites() {
+            try {
+                localStorage.setItem(
+                    "myVerseFavorites",
+                    JSON.stringify(favorites)
+                );
+            } catch (error) {
+                console.warn("Favorites could not be saved in this browser.");
+            }
+        }
+
+        // =====================================================
+        // HELPERS
+        // =====================================================
+
+        function escapeHTML(value) {
+            return String(value).replace(/[&<>"']/g, function (character) {
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                };
+
+                return entities[character];
+            });
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                anime: "Anime",
+                manga: "Manga",
+                games: "Game"
+            };
+
+            return names[category] || "Title";
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                anime: "fa-tv",
+                manga: "fa-book-open",
+                games: "fa-gamepad"
+            };
+
+            return icons[category] || "fa-star";
+        }
+
+        function getCoverClass(category) {
+            if (category === "manga") return "purple";
+            if (category === "games") return "cyan";
+            return "";
+        }
+
+        function isFavorite(id) {
+            return favorites.includes(id);
+        }
+
+        // =====================================================
+        // COUNTS
+        // =====================================================
+
+        function updateCounts() {
+            document.getElementById("animeCount").textContent =
+                catalog.filter(item => item.category === "anime").length;
+
+            document.getElementById("mangaCount").textContent =
+                catalog.filter(item => item.category === "manga").length;
+
+            document.getElementById("gameCount").textContent =
+                catalog.filter(item => item.category === "games").length;
+        }
+
+        // =====================================================
+        // RENDER CATALOG
+        // =====================================================
+
+        function renderCatalog() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            const filteredItems = catalog.filter(function (item) {
+                const matchesCategory =
+                    activeFilter === "all" ||
+                    (activeFilter === "favorites" && isFavorite(item.id)) ||
+                    item.category === activeFilter;
+
+                const searchableText = [
+                    item.title,
+                    item.genre,
+                    item.category,
+                    item.description,
+                    item.year
+                ].join(" ").toLowerCase();
+
+                const matchesSearch = searchableText.includes(searchTerm);
+
+                return matchesCategory && matchesSearch;
+            });
+
+            resultCount.textContent =
+                filteredItems.length +
+                (filteredItems.length === 1 ? " title" : " titles");
+
+            catalogGrid.innerHTML = filteredItems.map(function (item) {
+                const safeTitle = escapeHTML(item.title);
+                const safeGenre = escapeHTML(item.genre);
+                const safeYear = escapeHTML(item.year);
+                const safeImage = escapeHTML(item.image);
+                const safeIcon = escapeHTML(item.icon);
+
+                const coverClass = getCoverClass(item.category);
+                const favorite = isFavorite(item.id);
+
+                const imageMarkup = item.image
+                    ? `<img src="${safeImage}" alt="${safeTitle} cover"
+                           loading="lazy"
+                           onerror="this.parentElement.classList.add('has-no-image')">`
+                    : "";
+
+                return `
+                    <article class="catalog-card">
+                        <div class="cover ${coverClass} ${item.image ? "" : "has-no-image"}">
+                            <span class="type-badge">
+                                <i class="fa-solid ${getCategoryIcon(item.category)}"></i>
+                                ${getCategoryName(item.category)}
+                            </span>
+
+                            <button
+                                class="favorite-button ${favorite ? "is-favorite" : ""}"
+                                data-favorite="${item.id}"
+                                aria-label="${favorite ? "Remove from" : "Add to"} favorites: ${safeTitle}"
+                                aria-pressed="${favorite}">
+                                <i class="${favorite ? "fa-solid" : "fa-regular"} fa-heart"></i>
+                            </button>
+
+                            ${imageMarkup}
+
+                            <div class="cover-fallback">
+                                <i class="fa-solid ${safeIcon}"></i>
+                                <span>${safeTitle}</span>
+                            </div>
+                        </div>
+
+                        <div class="card-info">
+                            <h3>${safeTitle}</h3>
+
+                            <div class="card-meta">
+                                <span>${safeYear}</span>
+                                <span class="genre">${safeGenre}</span>
+                            </div>
+
+                            <p>${escapeHTML(item.description)}</p>
+
+                            <button class="details-button" data-details="${item.id}">
+                                View Details
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+
+            emptyState.style.display =
+                filteredItems.length === 0 ? "block" : "none";
+        }
+
+        // =====================================================
+        // FILTER BUTTONS AND SEARCH
+        // =====================================================
+
+        filterButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                activeFilter = button.dataset.filter;
+
+                filterButtons.forEach(function (item) {
+                    item.classList.toggle("active", item === button);
+                });
+
+                renderCatalog();
+            });
+        });
+
+        searchInput.addEventListener("input", renderCatalog);
+
+        document.getElementById("showFavorites").addEventListener("click", function () {
+            activeFilter = "favorites";
+
+            filterButtons.forEach(function (button) {
+                button.classList.toggle(
+                    "active",
+                    button.dataset.filter === "favorites"
+                );
+            });
+
+            renderCatalog();
+
+            document.getElementById("library").scrollIntoView({
+                behavior: "smooth"
+            });
+        });
+
+        // =====================================================
+        // FAVORITES
+        // =====================================================
+
+        function toggleFavorite(id) {
+            if (isFavorite(id)) {
+                favorites = favorites.filter(function (favoriteId) {
+                    return favoriteId !== id;
+                });
+            } else {
+                favorites.push(id);
+            }
+
+            saveFavorites();
+            renderCatalog();
+
+            if (activeModalItem && activeModalItem.id === id) {
+                updateModalFavoriteButton();
+            }
+        }
+
+        // Event delegation keeps buttons working after rerendering.
+        catalogGrid.addEventListener("click", function (event) {
+            const favoriteButton = event.target.closest("[data-favorite]");
+            const detailsButton = event.target.closest("[data-details]");
+
+            if (favoriteButton) {
+                toggleFavorite(favoriteButton.dataset.favorite);
+                return;
+            }
+
+            if (detailsButton) {
+                openDetails(detailsButton.dataset.details);
+            }
+        });
+
+        // =====================================================
+        // DETAILS MODAL
+        // =====================================================
+
+        function openDetails(id) {
+            const item = catalog.find(function (entry) {
+                return entry.id === id;
+            });
+
+            if (!item) return;
+
+            activeModalItem = item;
+
+            modalTitle.textContent = item.title;
+            modalType.textContent = getCategoryName(item.category) + " Details";
+            modalGenre.textContent = item.genre;
+            modalDescription.textContent =
+                item.description + (item.year !== "—" ? " Year: " + item.year + "." : "");
+
+            modalCover.innerHTML = "";
+
+            if (item.image) {
+                const image = document.createElement("img");
+                image.src = item.image;
+                image.alt = item.title + " cover";
+
+                image.addEventListener("error", function () {
+                    modalCover.innerHTML = `
+                        <div class="cover-fallback" style="display:block;padding:35px;text-align:center">
+                            <i class="fa-solid ${item.icon}" style="display:block;margin-top:50px;font-size:3rem;color:var(--cyan)"></i>
+                            <span>${escapeHTML(item.title)}</span>
+                        </div>
+                    `;
+                }, { once: true });
+
+                modalCover.appendChild(image);
+            } else {
+                modalCover.innerHTML = `
+                    <div class="cover-fallback" style="display:block;padding:35px;text-align:center">
+                        <i class="fa-solid ${item.icon}" style="display:block;margin-top:50px;font-size:3rem;color:var(--cyan)"></i>
+                        <span>${escapeHTML(item.title)}</span>
+                    </div>
+                `;
+            }
+
+            updateModalFavoriteButton();
+
+            modal.classList.add("open");
+            document.body.classList.add("modal-open");
+            document.getElementById("modalClose").focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove("open");
+            document.body.classList.remove("modal-open");
+            activeModalItem = null;
+        }
+
+        function updateModalFavoriteButton() {
+            if (!activeModalItem) return;
+
+            const favorite = isFavorite(activeModalItem.id);
+
+            modalFavorite.innerHTML = favorite
+                ? '<i class="fa-solid fa-heart"></i> Remove from Favorites'
+                : '<i class="fa-regular fa-heart"></i> Add to Favorites';
+        }
+
+        modalFavorite.addEventListener("click", function () {
+            if (activeModalItem) {
+                toggleFavorite(activeModalItem.id);
+            }
+        });
+
+        document.getElementById("modalClose").addEventListener("click", closeModal);
+
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && modal.classList.contains("open")) {
+                closeModal();
+            }
+        });
+
+        // =====================================================
+        // INITIALIZE PAGE
+        // =====================================================
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+        updateCounts();
+        renderCatalog();
+    </script>
+</body>
+
+</html>

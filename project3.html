@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d1b">
+
+    <title>Project 03 | Engineering & Technology</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #080d1b;
+            --card: #111b31;
+            --cyan: #67e8f9;
+            --blue: #60a5fa;
+            --purple: #a78bfa;
+            --green: #86efac;
+            --text: #f1f5f9;
+            --muted: #a3b1c6;
+            --border: rgba(148, 163, 184, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 10% 10%, rgba(59, 130, 246, .16), transparent 35%),
+                radial-gradient(ellipse at 90% 30%, rgba(167, 139, 250, .12), transparent 35%),
+                var(--bg);
+            font-family: "Inter", sans-serif;
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .container {
+            width: min(1150px, 90%);
+            margin: auto;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            padding: 17px 5%;
+            background: rgba(8, 13, 27, .94);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-family: "Orbitron", sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .logo span {
+            color: var(--cyan);
+        }
+
+        .back-link {
+            color: var(--cyan);
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .back-link i {
+            margin-right: 7px;
+        }
+
+        .hero {
+            padding: 90px 0 70px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 14px;
+            color: var(--cyan);
+            font-family: "Orbitron", sans-serif;
+            font-size: .72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: clamp(2.3rem, 7vw, 4.8rem);
+            line-height: 1.15;
+        }
+
+        .gradient {
+            color: transparent;
+            background: linear-gradient(100deg, var(--blue), var(--cyan), var(--purple));
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 0 auto 28px;
+            color: var(--muted);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 12px 19px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: #07101f;
+            background: linear-gradient(120deg, var(--blue), var(--cyan));
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, .25);
+        }
+
+        section {
+            padding: 50px 0;
+        }
+
+        .section-heading {
+            margin-bottom: 28px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 7px;
+            font-size: clamp(1.7rem, 4vw, 2.5rem);
+        }
+
+        .section-heading p {
+            color: var(--muted);
+        }
+
+        .project-grid,
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .panel,
+        .project-card,
+        .game-panel {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: rgba(17, 27, 49, .88);
+        }
+
+        .project-card {
+            padding: 25px;
+            transition: .25s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(103, 232, 249, .55);
+        }
+
+        .project-icon {
+            display: grid;
+            width: 55px;
+            height: 55px;
+            margin-bottom: 18px;
+            place-items: center;
+            border-radius: 13px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .09);
+            font-size: 1.5rem;
+        }
+
+        .project-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            margin-bottom: 15px;
+            color: var(--muted);
+            font-size: .92rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 9px;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 7px;
+            color: var(--cyan);
+            font-size: .75rem;
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 15px 18px;
+            border-left: 3px solid var(--purple);
+            border-radius: 7px;
+            color: var(--muted);
+            background: rgba(167, 139, 250, .06);
+            font-size: .88rem;
+        }
+
+        .game-panel {
+            overflow: hidden;
+            padding: 22px;
+        }
+
+        .game-panel h3 {
+            margin-bottom: 6px;
+        }
+
+        .game-description {
+            min-height: 55px;
+            margin-bottom: 18px;
+            color: var(--muted);
+            font-size: .87rem;
+        }
+
+        .game-button {
+            padding: 9px 13px;
+            border: 1px solid rgba(103, 232, 249, .3);
+            border-radius: 8px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .06);
+            transition: .2s;
+        }
+
+        .game-button:hover {
+            color: var(--bg);
+            background: var(--cyan);
+        }
+
+        .game-button:disabled {
+            cursor: not-allowed;
+            opacity: .45;
+        }
+
+        .game-status {
+            min-height: 48px;
+            margin-top: 15px;
+            color: var(--cyan);
+            font-size: .88rem;
+        }
+
+        /* MEMORY MATCH */
+
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 7px;
+            margin: 15px 0;
+        }
+
+        .memory-card {
+            display: grid;
+            min-width: 0;
+            aspect-ratio: 1;
+            place-items: center;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 9px;
+            color: var(--cyan);
+            background: #172554;
+            font-size: clamp(1.1rem, 3vw, 1.8rem);
+            transition: .2s;
+        }
+
+        .memory-card:hover {
+            border-color: var(--cyan);
+        }
+
+        .memory-card.revealed,
+        .memory-card.matched {
+            color: white;
+            background: #253a60;
+        }
+
+        .memory-card.matched {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        /* TIC TAC TOE */
+
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 7px;
+            margin: 15px 0;
+        }
+
+        .ttt-cell {
+            display: grid;
+            aspect-ratio: 1;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: var(--cyan);
+            background: #172554;
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        .ttt-cell:hover:not(:disabled) {
+            border-color: var(--cyan);
+            background: #20345b;
+        }
+
+        .ttt-cell:disabled {
+            cursor: default;
+        }
+
+        /* NUMBER GUESSING */
+
+        .guess-input {
+            width: 100%;
+            margin: 8px 0 12px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            color: var(--text);
+            background: #080d1b;
+        }
+
+        .guess-input:focus {
+            border-color: var(--cyan);
+        }
+
+        .guess-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .small-info {
+            margin: 10px 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .panel {
+            padding: 25px;
+        }
+
+        .panel h3 {
+            margin-bottom: 10px;
+        }
+
+        .panel p {
+            color: var(--muted);
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .tech {
+            padding: 7px 11px;
+            border: 1px solid rgba(103, 232, 249, .2);
+            border-radius: 8px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .06);
+            font-size: .85rem;
+        }
+
+        .reflection {
+            padding: 28px;
+            border: 1px solid rgba(167, 139, 250, .25);
+            border-radius: 16px;
+            background: rgba(167, 139, 250, .05);
+        }
+
+        .reflection p {
+            color: var(--muted);
+        }
+
+        .closing {
+            margin: 40px 0 70px;
+            padding: 35px 20px;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 17px;
+            background: linear-gradient(120deg, rgba(59, 130, 246, .1), rgba(167, 139, 250, .07));
+            text-align: center;
+        }
+
+        .closing p {
+            margin: 10px 0 20px;
+            color: var(--muted);
+        }
+
+        footer {
+            padding: 23px 5%;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: .85rem;
+        }
+
+        @media (max-width: 950px) {
+
+            .project-grid,
+            .game-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .project-grid,
+            .game-grid,
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 60px;
+            }
+
+            .game-description {
+                min-height: 0;
+            }
+
+            .back-link {
+                font-size: .78rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a class="logo" href="project3.html">
+                TECH<span>LAB</span>
+            </a>
+
+            <!-- Change website.html if your main portfolio has another filename. -->
+            <a class="back-link" href="website.html">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+            <span class="eyebrow">Project 03 / Technology Lab</span>
+
+            <h1>Engineering <span class="gradient">& Technology</span></h1>
+
+            <p>
+                Welcome to my Engineering and Technology page! I made this
+                project to explore technology, engineering ideas, and simple
+                games. It is also a way for me to practice coding and learn
+                how to make websites interactive.
+            </p>
+
+            <a href="#engineering" class="button">
+                Explore Projects
+                <i class="fa-solid fa-arrow-down"></i>
+            </a>
+
+            <a href="#minigames" class="button" style="margin-left: 8px;">
+                Play Mini Games
+                <i class="fa-solid fa-gamepad"></i>
+            </a>
+        </section>
+
+        <!-- ENGINEERING PROJECTS -->
+        <section id="engineering">
+            <div class="section-heading">
+                <span class="eyebrow">01 / Innovation</span>
+                <h2>Engineering <span class="gradient">Ideas</span></h2>
+                <p>
+                    These are concepts that show how technology could help
+                    solve everyday problems.
+                </p>
+            </div>
+
+            <div class="project-grid">
+                <article class="project-card">
+                    <div class="project-icon">
+                        <i class="fa-solid fa-house-signal"></i>
+                    </div>
+                    <h3>Smart Home System</h3>
+                    <p>
+                        A concept for using sensors and electronic devices
+                        to control home lights and monitor a room. A real
+                        version could use a microcontroller and sensors.
+                    </p>
+                    <span class="tag">Automation Concept</span>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-icon">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3>Obstacle-Avoiding Robot</h3>
+                    <p>
+                        A robot concept that uses distance sensors to detect
+                        objects and change direction instead of hitting them.
+                    </p>
+                    <span class="tag">Robotics Concept</span>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-icon">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <h3>Smart Plant Monitor</h3>
+                    <p>
+                        A device concept that checks soil moisture and helps
+                        someone know when a plant may need water.
+                    </p>
+                    <span class="tag">Sensor Concept</span>
+                </article>
+            </div>
+
+            <div class="note">
+                <i class="fa-solid fa-circle-info"></i>
+                These are concept projects for learning and planning, not
+                completed physical builds.
+            </div>
+        </section>
+
+        <!-- MINI GAMES -->
+        <section id="minigames">
+            <div class="section-heading">
+                <span class="eyebrow">02 / Interactive Zone</span>
+                <h2>Mini <span class="gradient">Games</span></h2>
+                <p>
+                    Take a break and try these simple games built with
+                    HTML, CSS, and JavaScript.
+                </p>
+            </div>
+
+            <div class="game-grid">
+
+                <!-- MEMORY MATCH -->
+                <article class="game-panel">
+                    <h3><i class="fa-solid fa-brain"></i> Memory Match</h3>
+                    <p class="game-description">
+                        Flip the cards and find all six matching pairs.
+                    </p>
+
+                    <p class="small-info">
+                        Moves: <strong id="memoryMoves">0</strong>
+                        &nbsp; | &nbsp;
+                        Pairs: <strong id="memoryPairs">0</strong>/6
+                    </p>
+
+                    <div class="memory-board" id="memoryBoard"></div>
+
+                    <button class="game-button" id="memoryRestart">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Restart Game
+                    </button>
+
+                    <p class="game-status" id="memoryStatus" aria-live="polite">
+                        Find the matching pairs!
+                    </p>
+                </article>
+
+                <!-- TIC TAC TOE -->
+                <article class="game-panel">
+                    <h3><i class="fa-solid fa-grip"></i> Tic-Tac-Toe</h3>
+                    <p class="game-description">
+                        Play X and O. Take turns and try to get three in a row.
+                    </p>
+
+                    <div class="ttt-board" id="tttBoard">
+                        <button class="ttt-cell" data-cell="0" aria-label="Cell 1"></button>
+                        <button class="ttt-cell" data-cell="1" aria-label="Cell 2"></button>
+                        <button class="ttt-cell" data-cell="2" aria-label="Cell 3"></button>
+                        <button class="ttt-cell" data-cell="3" aria-label="Cell 4"></button>
+                        <button class="ttt-cell" data-cell="4" aria-label="Cell 5"></button>
+                        <button class="ttt-cell" data-cell="5" aria-label="Cell 6"></button>
+                        <button class="ttt-cell" data-cell="6" aria-label="Cell 7"></button>
+                        <button class="ttt-cell" data-cell="7" aria-label="Cell 8"></button>
+                        <button class="ttt-cell" data-cell="8" aria-label="Cell 9"></button>
+                    </div>
+
+                    <button class="game-button" id="tttRestart">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Restart Game
+                    </button>
+
+                    <p class="game-status" id="tttStatus" aria-live="polite">
+                        X goes first!
+                    </p>
+                </article>
+
+                <!-- NUMBER GUESSING -->
+                <article class="game-panel">
+                    <h3><i class="fa-solid fa-hashtag"></i> Number Guessing</h3>
+                    <p class="game-description">
+                        Guess the secret number between 1 and 100.
+                    </p>
+
+                    <p class="small-info">
+                        Attempts: <strong id="guessAttempts">0</strong>
+                    </p>
+
+                    <form id="guessForm">
+                        <label for="guessInput">Your guess</label>
+                        <input class="guess-input" id="guessInput" type="number" min="1" max="100"
+                            placeholder="Enter 1–100" required>
+
+                        <div class="guess-controls">
+                            <button class="game-button" type="submit" id="guessButton">
+                                Guess
+                            </button>
+
+                            <button class="game-button" type="button" id="guessRestart">
+                                New Number
+                            </button>
+                        </div>
+                    </form>
+
+                    <p class="game-status" id="guessStatus" aria-live="polite">
+                        I picked a number. Can you guess it?
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <div class="section-heading">
+                <span class="eyebrow">03 / About</span>
+                <h2>About This <span class="gradient">Project</span></h2>
+            </div>
+
+            <div class="panel">
+                <h3><i class="fa-solid fa-lightbulb"></i> My Idea</h3>
+                <p>
+                    I wanted to make a website that combines my interest in
+                    technology with something fun. The engineering section
+                    contains ideas for possible future projects, while the
+                    mini-games let visitors interact with the page.
+                </p>
+            </div>
+        </section>
+
+        <!-- TECHNOLOGIES -->
+        <section id="technologies">
+            <div class="section-heading">
+                <span class="eyebrow">04 / Tools</span>
+                <h2>Technologies <span class="gradient">Used</span></h2>
+            </div>
+
+            <div class="panel">
+                <p>
+                    HTML creates the content, CSS controls the design, and
+                    JavaScript makes the mini-games work.
+                </p>
+
+                <div class="tech-list">
+                    <span class="tech">HTML</span>
+                    <span class="tech">CSS</span>
+                    <span class="tech">JavaScript</span>
+                    <span class="tech">Responsive Design</span>
+                    <span class="tech">VS Code</span>
+                    <span class="tech">Problem-Solving</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- REFLECTION -->
+        <section id="reflection">
+            <div class="section-heading">
+                <span class="eyebrow">05 / Learning</span>
+                <h2>What I <span class="gradient">Learned</span></h2>
+            </div>
+
+            <div class="reflection">
+                <p>
+                    While making this project, I practiced using HTML,
+                    CSS, and JavaScript together. I learned that JavaScript
+                    can be used for things like checking answers, keeping
+                    score, and responding to button clicks.
+                </p>
+                <br>
+                <p>
+                    I also learned that engineering ideas need planning
+                    and testing before they become real products. In the
+                    future, I want to learn more about electronics,
+                    robotics, and building projects of my own.
+                </p>
+            </div>
+        </section>
+
+        <!-- CLOSING -->
+        <div class="closing">
+            <h2>Thanks for Visiting TechLab!</h2>
+            <p>
+                This project is part of my journey in learning web
+                development and exploring technology.
+            </p>
+
+            <a class="button" href="website.html">
+                <i class="fa-solid fa-arrow-left"></i>
+                Return to Main Portfolio
+            </a>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>
+            &copy; <span id="year"></span> Hillary Ace P. Brit.
+            Engineering & Technology Project.
+        </p>
+    </footer>
+
+    <script>
+        // Show the current year.
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+        // =====================================
+        // MEMORY MATCH GAME
+        // =====================================
+
+        const memoryBoard = document.getElementById("memoryBoard");
+        const memoryMovesDisplay = document.getElementById("memoryMoves");
+        const memoryPairsDisplay = document.getElementById("memoryPairs");
+        const memoryStatus = document.getElementById("memoryStatus");
+        const memoryRestart = document.getElementById("memoryRestart");
+
+        const memorySymbols = [
+            "🚀", "🤖", "⚡", "🎮", "🧠", "🛠️"
+        ];
+
+        let memoryValues = [];
+        let firstMemoryCard = null;
+        let lockMemoryBoard = false;
+        let memoryMoves = 0;
+        let memoryPairs = 0;
+        let memoryRound = 0;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startMemoryGame() {
+            memoryRound++;
+
+            memoryValues = shuffleArray([
+                ...memorySymbols,
+                ...memorySymbols
+            ]);
+
+            firstMemoryCard = null;
+            lockMemoryBoard = false;
+            memoryMoves = 0;
+            memoryPairs = 0;
+
+            memoryMovesDisplay.textContent = "0";
+            memoryPairsDisplay.textContent = "0";
+            memoryStatus.textContent = "Find the matching pairs!";
+            memoryBoard.innerHTML = "";
+
+            memoryValues.forEach(function (symbol, index) {
+                const card = document.createElement("button");
+
+                card.type = "button";
+                card.className = "memory-card";
+                card.textContent = "?";
+                card.dataset.symbol = symbol;
+                card.dataset.index = index;
+                card.setAttribute("aria-label", "Hidden card");
+
+                card.addEventListener("click", function () {
+                    flipMemoryCard(card);
+                });
+
+                memoryBoard.appendChild(card);
+            });
+        }
+
+        function flipMemoryCard(card) {
+            if (
+                lockMemoryBoard ||
+                card.classList.contains("revealed") ||
+                card.classList.contains("matched")
+            ) {
+                return;
+            }
+
+            card.textContent = card.dataset.symbol;
+            card.classList.add("revealed");
+            card.setAttribute("aria-label", card.dataset.symbol);
+
+            if (!firstMemoryCard) {
+                firstMemoryCard = card;
+                return;
+            }
+
+            memoryMoves++;
+            memoryMovesDisplay.textContent = memoryMoves;
+
+            if (firstMemoryCard.dataset.symbol === card.dataset.symbol) {
+                firstMemoryCard.classList.remove("revealed");
+                card.classList.remove("revealed");
+
+                firstMemoryCard.classList.add("matched");
+                card.classList.add("matched");
+
+                firstMemoryCard.disabled = true;
+                card.disabled = true;
+
+                firstMemoryCard = null;
+                memoryPairs++;
+
+                memoryPairsDisplay.textContent = memoryPairs;
+
+                if (memoryPairs === memorySymbols.length) {
+                    memoryStatus.textContent =
+                        "You won! You found all the pairs in " +
+                        memoryMoves + " moves.";
+                }
+            } else {
+                lockMemoryBoard = true;
+
+                const previousCard = firstMemoryCard;
+                firstMemoryCard = null;
+
+                memoryStatus.textContent = "Not a match. Try again!";
+
+                // The timeout only delays hiding the unmatched cards.
+                setTimeout(function () {
+                    // Ignore an old turn if the game was restarted.
+                    if (memoryRound !== currentMemoryRound) {
+                        return;
+                    }
+
+                    previousCard.textContent = "?";
+                    card.textContent = "?";
+
+                    previousCard.classList.remove("revealed");
+                    card.classList.remove("revealed");
+
+                    previousCard.setAttribute("aria-label", "Hidden card");
+                    card.setAttribute("aria-label", "Hidden card");
+
+                    lockMemoryBoard = false;
+                }, 750);
+
+                currentMemoryRound = memoryRound;
+            }
+        }
+
+        let currentMemoryRound = 0;
+
+        memoryRestart.addEventListener("click", startMemoryGame);
+
+        // =====================================
+        // TIC-TAC-TOE GAME
+        // =====================================
+
+        const tttCells = document.querySelectorAll(".ttt-cell");
+        const tttStatus = document.getElementById("tttStatus");
+        const tttRestart = document.getElementById("tttRestart");
+
+        const winningLines = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        let tttValues = Array(9).fill("");
+        let currentPlayer = "X";
+        let tttFinished = false;
+
+        function checkWinner() {
+            for (const line of winningLines) {
+                const [a, b, c] = line;
+
+                if (
+                    tttValues[a] &&
+                    tttValues[a] === tttValues[b] &&
+                    tttValues[a] === tttValues[c]
+                ) {
+                    return tttValues[a];
+                }
+            }
+
+            return null;
+        }
+
+        function playTicTacToe(event) {
+            const cell = event.currentTarget;
+            const index = Number(cell.dataset.cell);
+
+            if (tttFinished || tttValues[index] !== "") {
+                return;
+            }
+
+            tttValues[index] = currentPlayer;
+            cell.textContent = currentPlayer;
+            cell.disabled = true;
+
+            const winner = checkWinner();
+
+            if (winner) {
+                tttStatus.textContent = winner + " wins! Great job!";
+                tttFinished = true;
+                tttCells.forEach(function (item) {
+                    item.disabled = true;
+                });
+                return;
+            }
+
+            if (tttValues.every(function (value) {
+                return value !== "";
+            })) {
+                tttStatus.textContent = "It's a draw! Play again.";
+                tttFinished = true;
+                return;
+            }
+
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            tttStatus.textContent = "Player " + currentPlayer + "'s turn.";
+        }
+
+        function restartTicTacToe() {
+            tttValues = Array(9).fill("");
+            currentPlayer = "X";
+            tttFinished = false;
+
+            tttCells.forEach(function (cell) {
+                cell.textContent = "";
+                cell.disabled = false;
+            });
+
+            tttStatus.textContent = "X goes first!";
+        }
+
+        tttCells.forEach(function (cell) {
+            cell.addEventListener("click", playTicTacToe);
+        });
+
+        tttRestart.addEventListener("click", restartTicTacToe);
+
+        // =====================================
+        // NUMBER GUESSING GAME
+        // =====================================
+
+        const guessForm = document.getElementById("guessForm");
+        const guessInput = document.getElementById("guessInput");
+        const guessAttemptsDisplay = document.getElementById("guessAttempts");
+        const guessStatus = document.getElementById("guessStatus");
+        const guessRestart = document.getElementById("guessRestart");
+
+        let secretNumber = 0;
+        let guessAttempts = 0;
+        let guessFinished = false;
+
+        function startGuessingGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            guessAttempts = 0;
+            guessFinished = false;
+
+            guessAttemptsDisplay.textContent = "0";
+            guessStatus.textContent =
+                "I picked a new number. Can you guess it?";
+
+            guessInput.value = "";
+            guessInput.disabled = false;
+            guessForm.querySelector('button[type="submit"]').disabled = false;
+
+            guessInput.focus();
+        }
+
+        guessForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (guessFinished) {
+                return;
+            }
+
+            const guess = Number(guessInput.value);
+
+            if (
+                !Number.isInteger(guess) ||
+                guess < 1 ||
+                guess > 100
+            ) {
+                guessStatus.textContent =
+                    "Please enter a whole number from 1 to 100.";
+                return;
+            }
+
+            guessAttempts++;
+            guessAttemptsDisplay.textContent = guessAttempts;
+
+            if (guess === secretNumber) {
+                guessStatus.textContent =
+                    "Correct! You got it in " + guessAttempts + " attempts!";
+                guessFinished = true;
+                guessInput.disabled = true;
+                guessForm.querySelector('button[type="submit"]').disabled = true;
+            } else if (guess < secretNumber) {
+                guessStatus.textContent = "Too low! Try a higher number.";
+            } else {
+                guessStatus.textContent = "Too high! Try a lower number.";
+            }
+
+            if (!guessFinished) {
+                guessInput.select();
+            }
+        });
+
+        guessRestart.addEventListener("click", startGuessingGame);
+
+        // Start all three games when the page loads.
+        startMemoryGame();
+        restartTicTacToe();
+        startGuessingGame();
+    </script>
+</body>
+
+</html>

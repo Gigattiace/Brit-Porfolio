@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d1b">
+
+    <title>Project 01 | Personal Portfolio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #080d1b;
+            --card: #111b31;
+            --blue: #60a5fa;
+            --cyan: #67e8f9;
+            --text: #f1f5f9;
+            --muted: #a3b1c6;
+            --border: rgba(148, 163, 184, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 15% 10%,
+                    rgba(59, 130, 246, .18),
+                    transparent 35%),
+                radial-gradient(ellipse at 90% 35%,
+                    rgba(103, 232, 249, .09),
+                    transparent 30%),
+                var(--bg);
+            font-family: "Inter", sans-serif;
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1100px, 86%);
+            margin: auto;
+        }
+
+        /* NAVIGATION */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 18px 7%;
+            background: rgba(8, 13, 27, .9);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-family: "Orbitron", sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .logo span {
+            color: var(--cyan);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--cyan);
+            font-size: .9rem;
+            font-weight: 700;
+            transition: .25s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-4px);
+        }
+
+        /* HERO SECTION */
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            align-items: center;
+            gap: 55px;
+            padding: 90px 0 75px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 18px;
+            color: var(--cyan);
+            font-family: "Orbitron", sans-serif;
+            font-size: .75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-bottom: 22px;
+            font-size: clamp(2.4rem, 6vw, 4.5rem);
+            line-height: 1.12;
+            letter-spacing: -2px;
+        }
+
+        h1 span,
+        .gradient {
+            color: transparent;
+            background: linear-gradient(100deg,
+                    var(--blue),
+                    var(--cyan));
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        p {
+            color: var(--muted);
+        }
+
+        .hero-description {
+            max-width: 590px;
+            margin-bottom: 28px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 13px 20px;
+            border-radius: 11px;
+            color: #07101f;
+            background: linear-gradient(120deg,
+                    var(--blue),
+                    var(--cyan));
+            font-weight: 800;
+            transition: .25s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, .25);
+        }
+
+        .photo-card {
+            padding: 15px;
+            border: 1px solid rgba(103, 232, 249, .3);
+            border-radius: 25px;
+            background: rgba(17, 27, 49, .8);
+            box-shadow: 0 0 50px rgba(59, 130, 246, .12);
+        }
+
+        .photo-card img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 17px;
+        }
+
+        .photo-caption {
+            padding: 16px 5px 4px;
+            text-align: center;
+        }
+
+        .photo-caption strong {
+            display: block;
+            font-size: 1.05rem;
+        }
+
+        .photo-caption span {
+            color: var(--cyan);
+            font-size: .85rem;
+        }
+
+        /* GENERAL SECTIONS */
+
+        section {
+            padding: 65px 0;
+            scroll-margin-top: 90px;
+        }
+
+        .section-heading {
+            margin-bottom: 32px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 10px;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            letter-spacing: -1px;
+        }
+
+        .section-heading p {
+            max-width: 650px;
+        }
+
+        /* ABOUT, SKILLS, AND PROJECT CARDS */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .info-card {
+            min-width: 0;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(17, 27, 49, .82);
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103, 232, 249, .5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.15rem;
+        }
+
+        .info-card p {
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            display: grid;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 18px;
+            place-items: center;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 14px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .08);
+            font-size: 1.25rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .skill-tag {
+            padding: 7px 12px;
+            border: 1px solid rgba(103, 232, 249, .2);
+            border-radius: 999px;
+            color: var(--cyan);
+            background: rgba(103, 232, 249, .06);
+            font-size: .85rem;
+            font-weight: 700;
+        }
+
+        .project-number {
+            display: inline-block;
+            margin-bottom: 12px;
+            color: var(--cyan);
+            font-family: "Orbitron", sans-serif;
+            font-size: .75rem;
+            letter-spacing: 1.5px;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .project-link:hover {
+            color: var(--blue);
+        }
+
+        /* CLOSING SECTION */
+
+        .project-footer {
+            margin: 50px 0 80px;
+            padding: 35px;
+            border: 1px solid rgba(103, 232, 249, .25);
+            border-radius: 20px;
+            background: linear-gradient(120deg,
+                    rgba(59, 130, 246, .1),
+                    rgba(103, 232, 249, .04));
+            text-align: center;
+        }
+
+        .project-footer h2 {
+            margin-bottom: 10px;
+        }
+
+        .project-footer p {
+            margin-bottom: 22px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 25px 7%;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: .85rem;
+        }
+
+        /* TABLET */
+
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* SMALL SCREENS */
+
+        @media (max-width: 760px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 35px;
+                padding-top: 60px;
+            }
+
+            .photo-card {
+                width: min(360px, 100%);
+                margin: auto;
+            }
+
+            header {
+                padding-inline: 7%;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-link {
+                font-size: .8rem;
+            }
+
+            .project-footer {
+                padding: 25px 18px;
+            }
+        }
+
+        /* REDUCE ANIMATIONS WHEN PREFERRED */
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header>
+        <nav class="container">
+            <a class="logo" href="website.html">BRIT<span>.</span></a>
+
+            <a class="back-link" href="website.html">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Main Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- INTRODUCTION -->
+        <section class="hero" id="home">
+
+            <div>
+                <span class="eyebrow">
+                    Project 01 / Personal Portfolio
+                </span>
+
+                <h1>My Personal <span>Portfolio</span></h1>
+
+                <p class="hero-description">
+                    Welcome to my personal portfolio! I'm Hillary Ace P. Brit,
+                    a Computer Engineering student learning programming and web
+                    development. This website introduces my background, the
+                    skills I'm developing, and the projects I'm building along
+                    the way.
+                </p>
+
+                <a class="button" href="#about">
+                    Get to Know Me
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+            </div>
+
+            <div class="photo-card">
+                <img src="ACE.jpg" alt="Photo of Hillary Ace P. Brit"
+                    onerror="this.style.display='none';">
+
+                <div class="photo-caption">
+                    <strong>Hillary Ace P. Brit</strong>
+                    <span>Computer Engineering Student</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ABOUT ME -->
+        <section id="about">
+            <div class="section-heading">
+                <span class="eyebrow">01 / About Me</span>
+                <h2>Get to Know <span class="gradient">Me</span></h2>
+                <p>A little about my background, my learning journey, and my goals.</p>
+            </div>
+
+            <div class="content-grid">
+                <article class="info-card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+
+                    <h3>Who I Am</h3>
+
+                    <p>
+                        Hello! I'm Hillary Ace P. Brit, a Computer Engineering
+                        student. I'm beginning my journey into programming and
+                        web development, and I use projects like this one to
+                        practice what I learn and build my confidence.
+                    </p>
+                </article>
+
+                <article class="info-card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+
+                    <h3>My Learning Journey</h3>
+
+                    <p>
+                        I'm learning how to create websites with HTML, style
+                        them with CSS, and add interactivity with JavaScript.
+                        My goal is to keep practicing, solving problems, and
+                        improving one project at a time.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills">
+            <div class="section-heading">
+                <span class="eyebrow">02 / My Skills</span>
+                <h2>What I'm <span class="gradient">Learning</span></h2>
+                <p>
+                    These are the web development skills I'm currently
+                    practicing and improving.
+                </p>
+            </div>
+
+            <div class="content-grid">
+                <article class="info-card">
+                    <div class="card-icon">
+                        <i class="fa-brands fa-html5"></i>
+                    </div>
+
+                    <h3>HTML</h3>
+
+                    <p>
+                        I use HTML to structure a webpage with headings,
+                        paragraphs, images, links, and sections.
+                    </p>
+
+                    <div class="skill-list">
+                        <span class="skill-tag">Page Structure</span>
+                        <span class="skill-tag">Semantic Elements</span>
+                    </div>
+                </article>
+
+                <article class="info-card">
+                    <div class="card-icon">
+                        <i class="fa-brands fa-css3-alt"></i>
+                    </div>
+
+                    <h3>CSS</h3>
+
+                    <p>
+                        I'm learning to style pages with colors, layouts,
+                        spacing, animations, and responsive designs.
+                    </p>
+
+                    <div class="skill-list">
+                        <span class="skill-tag">Layouts</span>
+                        <span class="skill-tag">Responsive Design</span>
+                    </div>
+                </article>
+
+                <article class="info-card">
+                    <div class="card-icon">
+                        <i class="fa-brands fa-js"></i>
+                    </div>
+
+                    <h3>JavaScript</h3>
+
+                    <p>
+                        I'm practicing JavaScript to make websites more
+                        interactive and respond to user actions.
+                    </p>
+
+                    <div class="skill-list">
+                        <span class="skill-tag">Interactions</span>
+                        <span class="skill-tag">DOM Basics</span>
+                    </div>
+                </article>
+
+                <article class="info-card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <h3>Problem Solving</h3>
+
+                    <p>
+                        I learn by testing ideas, fixing mistakes, and making
+                        small improvements as I build.
+                    </p>
+
+                    <div class="skill-list">
+                        <span class="skill-tag">Practice</span>
+                        <span class="skill-tag">Continuous Learning</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+            <div class="section-heading">
+                <span class="eyebrow">03 / My Projects</span>
+                <h2>Things I'm <span class="gradient">Building</span></h2>
+                <p>
+                    Explore the projects I'm creating while learning
+                    web development.
+                </p>
+            </div>
+
+            <div class="content-grid">
+                <article class="info-card">
+                    <span class="project-number">PROJECT 01</span>
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+
+                    <h3>Personal Portfolio</h3>
+
+                    <p>
+                        This portfolio introduces me, shares the skills I'm
+                        learning, and collects my web development work in one
+                        place.
+                    </p>
+
+                    <div class="skill-list">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                    </div>
+
+                    <a class="project-link" href="website.html">
+                        Main Portfolio
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </article>
+
+                <article class="info-card">
+                    <span class="project-number">PROJECT 02</span>
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+
+                    <h3>AnimeVerse × MangaVerse × GameVerse</h3>
+
+                    <p>
+                        A separate catalog for exploring anime, manga and
+                        manhwa, and video games. My interests are featured
+                        there instead of on this portfolio page.
+                    </p>
+
+                    <div class="skill-list">
+                        <span class="skill-tag">Anime</span>
+                        <span class="skill-tag">Manga</span>
+                        <span class="skill-tag">Games</span>
+                    </div>
+
+                    <a class="project-link" href="project2.html">
+                        Explore Project 02
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- CLOSING -->
+        <div class="project-footer">
+            <h2>Thanks for Visiting!</h2>
+
+            <p>
+                This is one of my projects as I continue learning about
+                web development and technology. I'll keep practicing
+                and improving my skills as I work on more projects.
+            </p>
+
+            <a class="button" href="website.html">
+                <i class="fa-solid fa-arrow-left"></i>
+                Return to Main Portfolio
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>
+            &copy; <span id="year"></span> Hillary Ace P. Brit.
+            Personal Portfolio Project.
+        </p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Update the footer year automatically
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+
+</html>

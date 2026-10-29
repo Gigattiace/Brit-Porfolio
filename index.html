@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRIT | Loading Screen</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #080d1b;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Full-screen loading page */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #11152c;
+            z-index: 9999;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loading-screen.finished {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Anime-inspired sunset city scenery */
+        .city-background {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom,
+                    rgba(8, 13, 27, 0.08),
+                    rgba(8, 13, 27, 0.25) 45%,
+                    rgba(8, 13, 27, 0.88)),
+                url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2200&q=90") center / cover no-repeat;
+            transform: scale(1.05);
+            animation: sceneryZoom 22s ease-in-out infinite alternate;
+        }
+
+        /* Purple-pink sunset tint */
+        .city-background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg,
+                    rgba(64, 35, 111, 0.25),
+                    rgba(244, 114, 182, 0.12),
+                    rgba(14, 35, 82, 0.45));
+            mix-blend-mode: screen;
+        }
+
+        /* Loading content with gentle, slow shaking */
+        .loading-content {
+            position: relative;
+            z-index: 2;
+            width: min(90%, 480px);
+            padding: 35px 28px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+            background: rgba(8, 13, 27, 0.35);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 60px rgba(103, 232, 249, 0.08);
+
+            /* Entrance animation followed by gentle shaking */
+            animation:
+                contentAppear 1.2s ease both,
+                gentleShake 1.8s ease-in-out 1.2s infinite;
+        }
+
+        /* Natural, subtle shaking */
+        @keyframes gentleShake {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(-1px, 0) rotate(-0.25deg);
+            }
+
+            50% {
+                transform: translate(1px, 0) rotate(0.25deg);
+            }
+
+            75% {
+                transform: translate(-0.5px, 0) rotate(-0.1deg);
+            }
+        }
+
+        .loading-logo {
+            margin-bottom: 22px;
+            color: #67e8f9;
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+
+        .loading-title {
+            margin-bottom: 12px;
+            font-size: clamp(36px, 7vw, 58px);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
+        }
+
+        .loading-title span {
+            color: #67e8f9;
+        }
+
+        .loading-subtitle {
+            min-height: 24px;
+            margin-bottom: 28px;
+            color: #d6e4f7;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        /* Progress bar */
+        .progress-track {
+            width: 100%;
+            height: 9px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #60a5fa, #67e8f9, #f0abfc);
+            box-shadow: 0 0 18px rgba(103, 232, 249, 0.75);
+            transition: width 0.12s linear;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            color: #e5eefc;
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+        }
+
+        .loading-footer {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        /* Portfolio appears after loading */
+        .portfolio-content {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .portfolio-content h1 {
+            margin-bottom: 12px;
+            font-size: clamp(35px, 7vw, 64px);
+            background: linear-gradient(90deg, #60a5fa, #67e8f9);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .portfolio-content p {
+            color: #9eafc6;
+            line-height: 1.8;
+        }
+
+        @keyframes sceneryZoom {
+            from {
+                transform: scale(1.05);
+            }
+
+            to {
+                transform: scale(1.16);
+            }
+        }
+
+        @keyframes contentAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loading-content {
+                padding: 28px 20px;
+            }
+
+            .loading-logo {
+                letter-spacing: 4px;
+            }
+
+            .loading-footer {
+                letter-spacing: 1px;
+            }
+        }
+
+        /* Respect reduced-motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ANIME CITY LOADING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="city-background"></div>
+
+        <div class="loading-content">
+            <div class="loading-logo">BRIT · Portfolio</div>
+
+            <h1 class="loading-title">
+                Loading<span>...</span>
+            </h1>
+
+            <p class="loading-subtitle" id="loadingMessage">
+                Entering my portfolio
+            </p>
+
+            <div class="progress-track" role="progressbar" aria-label="Loading progress" aria-valuemin="0"
+                aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="progress-info">
+                <span id="progressLabel">INITIALIZING</span>
+                <span id="progressPercent">0%</span>
+            </div>
+
+            <div class="loading-footer">
+                A LITTLE WORLD OF MY OWN
+            </div>
+        </div>
+    </div>
+
+    <!-- Replace this sample with your actual portfolio content -->
+    <main class="portfolio-content" id="portfolioContent">
+        <div>
+            <h1>Welcome to My Portfolio</h1>
+            <p>
+                Hello! Welcome to my personal portfolio.<br>
+                Explore my education, skills, projects, and journey.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        const loadingScreen = document.getElementById("loadingScreen");
+        const progressFill = document.getElementById("progressFill");
+        const progressPercent = document.getElementById("progressPercent");
+        const progressTrack = document.getElementById("progressTrack");
+        const loadingMessage = document.getElementById("loadingMessage");
+        const progressLabel = document.getElementById("progressLabel");
+
+        const messages = [
+            "Entering your digital universe...",
+            "Exploring the city lights...",
+            "Preparing your experience...",
+            "Almost ready to begin...",
+            "Welcome to my world!"
+        ];
+
+        let progress = 0;
+        let messageIndex = 0;
+
+        const loadingTimer = setInterval(() => {
+            progress += Math.random() * 3 + 1;
+
+            if (progress >= 100) {
+                progress = 100;
+            }
+
+            progressFill.style.width = progress + "%";
+            progressPercent.textContent = Math.floor(progress) + "%";
+
+            progressTrack.setAttribute(
+                "aria-valuenow",
+                Math.floor(progress)
+            );
+
+            // Update the status message
+            const nextMessageIndex = Math.min(
+                Math.floor(progress / 25),
+                messages.length - 1
+            );
+
+            if (nextMessageIndex !== messageIndex) {
+                messageIndex = nextMessageIndex;
+                loadingMessage.textContent = messages[messageIndex];
+            }
+
+            if (progress < 35) {
+                progressLabel.textContent = "INITIALIZING";
+            } else if (progress < 70) {
+                progressLabel.textContent = "LOADING ASSETS";
+            } else if (progress < 100) {
+                progressLabel.textContent = "ALMOST READY";
+            } else {
+                progressLabel.textContent = "COMPLETE";
+
+                clearInterval(loadingTimer);
+
+                // Fade out the loading screen
+                setTimeout(() => {
+                    loadingScreen.classList.add("finished");
+                    document.body.style.overflow = "auto";
+                }, 500);
+            }
+        }, 90);
+    </script>
+
+    <script>
+        // Wait 4 seconds, then open the main website
+        setTimeout(function () {
+            window.location.href = "website.html";
+        }, 4000);
+    </script>
+
+</body>
+
+</html>
