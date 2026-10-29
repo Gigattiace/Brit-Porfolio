@@ -2949,178 +2949,431 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1M52wZE5wr3tP38-MTEqmw_MCbN6kEt
                     JSON.stringify(messages)
                 );
 
-                return true;
-            } catch (error) {
-                console.error("Unable to save messages:", error);
-                return false;
-            }
-        }
+const navbar = document.getElementById("navbar");
+const scrollProgress = document.getElementById("scrollProgress");
 
-        /* =========================
-           MESSAGE STATUS
-        ========================= */
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
 
-        function showFormStatus(message, isError = false) {
-            formStatus.textContent = message;
+const navigationAnchors = document.querySelectorAll(    
+    '.nav-links a[href^="#"]'    
+);    
 
-            formStatus.classList.add("show");
-            formStatus.classList.toggle("error", isError);
-        }
+const contactForm = document.getElementById("contactForm");    
+const visitorName = document.getElementById("visitorName");    
+const visitorMessage = document.getElementById("visitorMessage");    
 
-        /* =========================
-           FORMAT DATE
-        ========================= */
+const formStatus = document.getElementById("formStatus");    
+const submitButton = document.getElementById("submitButton");    
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
+const messageRecords = document.getElementById("messageRecords");    
+const messageCount = document.getElementById("messageCount");    
 
-            if (Number.isNaN(date.getTime())) {
-                return "Date unavailable";
-            }
+const currentYear = document.getElementById("currentYear");    
 
-            return date.toLocaleString(undefined, {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "2-digit"
-            });
-        }
+const STORAGE_KEY = "britPortfolioMessages";    
+const SUPABASE_URL = "https://fiwgpmxiidwcldzsgeie.supabase.co";    
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1M52wZE5wr3tP38-MTEqmw_MCbN6kEt";    
 
-        /* =========================
-           RENDER MESSAGE RECORDS
-        ========================= */
+/* =========================    
+   FOOTER YEAR    
+========================= */    
 
-        function renderMessages() {
-            const messages = getSavedMessages();
+currentYear.textContent = new Date().getFullYear();    
 
-            messageCount.textContent = String(messages.length);
+/* =========================    
+   MOBILE NAVIGATION    
+========================= */    
 
-            messageRecords.replaceChildren();
+function closeMobileMenu() {    
+    navLinks.classList.remove("open");    
 
-            if (messages.length === 0) {
-                const emptyState = document.createElement("div");
-                emptyState.className = "empty-records";
+    menuToggle.setAttribute("aria-expanded", "false");    
+    menuToggle.setAttribute("aria-label", "Open navigation menu");    
 
-                const icon = document.createElement("i");
-                icon.className = "fa-regular fa-envelope-open";
+    menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';    
+}    
 
-                const text = document.createElement("p");
-                text.textContent = "No messages have been saved yet.";
+menuToggle.addEventListener("click", () => {    
+    const isOpen = navLinks.classList.toggle("open");    
 
-                emptyState.append(icon, text);
-                messageRecords.appendChild(emptyState);
+    menuToggle.setAttribute("aria-expanded", String(isOpen));    
 
-                return;
-            }
+    menuToggle.setAttribute(    
+        "aria-label",    
+        isOpen ? "Close navigation menu" : "Open navigation menu"    
+    );    
 
-            messages.forEach((message) => {
-                const record = document.createElement("article");
-                record.className = "message-record";
+    menuToggle.innerHTML = isOpen    
+        ? '<i class="fa-solid fa-xmark"></i>'    
+        : '<i class="fa-solid fa-bars"></i>';    
+});    
 
-                const top = document.createElement("div");
-                top.className = "record-top";
+navigationAnchors.forEach((link) => {    
+    link.addEventListener("click", closeMobileMenu);    
+});    
 
-                const name = document.createElement("strong");
-                name.className = "record-name";
+document.addEventListener("click", (event) => {    
+    if (    
+        !navLinks.contains(event.target) &&    
+        !menuToggle.contains(event.target)    
+    ) {    
+        closeMobileMenu();    
+    }    
+});    
 
-                // Keep user-provided text as text, not executable HTML.
-                name.textContent = message.name;
+document.addEventListener("keydown", (event) => {    
+    if (event.key === "Escape") {    
+        closeMobileMenu();    
+    }    
+});    
 
-                const date = document.createElement("time");
-                date.className = "record-date";
-                date.dateTime = message.date;
-                date.textContent = formatDate(message.date);
+/* =========================    
+   SCROLL EFFECTS    
+========================= */    
 
-                const content = document.createElement("p");
-                content.className = "record-message";
-                content.textContent = message.message;
+function updateScrollEffects() {    
+    const scrollTop =    
+        window.scrollY ||    
+        document.documentElement.scrollTop;    
 
-                top.append(name, date);
-                record.append(top, content);
+    const scrollableHeight =    
+        document.documentElement.scrollHeight -    
+        document.documentElement.clientHeight;    
 
-                messageRecords.appendChild(record);
-            });
-        }
+    const progress =    
+        scrollableHeight > 0    
+            ? (scrollTop / scrollableHeight) * 100    
+            : 0;    
 
-        
-/* =========================
-   MESSAGE STATUS
-========================= */
+    scrollProgress.style.width = `${progress}%`;    
 
-function showFormStatus(message, isError = false) {
-    formStatus.textContent = message;
-    formStatus.classList.add("show");
-    formStatus.classList.toggle("error", isError);
-}
+    navbar.classList.toggle("scrolled", scrollTop > 30);    
+}    
 
-/* =========================
-   SUBMIT CONTACT FORM TO SUPABASE
-========================= */
+window.addEventListener("scroll", updateScrollEffects, {    
+    passive: true    
+});    
 
-contactForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+updateScrollEffects();    
 
-    const name = visitorName.value.trim();
-    const message = visitorMessage.value.trim();
+/* =========================    
+   ACTIVE NAVIGATION LINK    
+========================= */    
 
-    if (!name || !message) {
-        showFormStatus("Please enter your name and a message.", true);
-        return;
-    }
+const observedSections = document.querySelectorAll(    
+    "main section[id]"    
+);    
 
-    if (name.length > 80) {
-        showFormStatus("Your name must be 80 characters or fewer.", true);
-        return;
-    }
+if ("IntersectionObserver" in window) {    
+    const sectionObserver = new IntersectionObserver(    
+        (entries) => {    
+            entries.forEach((entry) => {    
+                if (!entry.isIntersecting) return;    
 
-    if (message.length > 2000) {
-        showFormStatus(
-            "Your message must be 2,000 characters or fewer.",
-            true
-        );
-        return;
-    }
+                const currentId = entry.target.id;    
 
-    const originalButtonContent = submitButton.innerHTML;
+                navigationAnchors.forEach((link) => {    
+                    const isActive =    
+                        link.getAttribute("href") === `#${currentId}`;    
 
-    submitButton.disabled = true;
-    submitButton.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+                    link.classList.toggle("active", isActive);    
+                });    
+            });    
+        },    
+        {    
+            rootMargin: "-35% 0px -55% 0px",    
+            threshold: 0    
+        }    
+    );    
 
-    try {
-        const { error } = await supabaseClient
-            .from("contact_messages")
-            .insert([{ name, message }]);
+    observedSections.forEach((section) => {    
+        sectionObserver.observe(section);    
+    });    
+}    
 
-        if (error) {
-            console.error("Supabase save error:", error);
+/* =========================    
+   SCROLL REVEAL ANIMATION    
+========================= */    
 
-            showFormStatus(
-                "Unable to save your message online. Please try again.",
-                true
-            );
-            return;
-        }
+const revealElements = document.querySelectorAll(".reveal");    
 
-        contactForm.reset();
+if ("IntersectionObserver" in window) {    
+    const revealObserver = new IntersectionObserver(    
+        (entries, observer) => {    
+            entries.forEach((entry) => {    
+                if (entry.isIntersecting) {    
+                    entry.target.classList.add("visible");    
+                    observer.unobserve(entry.target);    
+                }    
+            });    
+        },    
+        {    
+            threshold: 0.12    
+        }    
+    );    
 
-        showFormStatus(
-            "Your message was saved successfully. Thank you!"
-        );
+    revealElements.forEach((element) => {    
+        revealObserver.observe(element);    
+    });    
+} else {    
+    revealElements.forEach((element) => {    
+        element.classList.add("visible");    
+    });    
+}    
 
-    } catch (error) {
-        console.error("Connection error:", error);
+/* =========================    
+   SKILL BAR ANIMATION    
+========================= */    
 
-        showFormStatus(
-            "Connection error. Please check your internet and try again.",
-            true
-        );
-    } finally {
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalButtonContent;
-    }
-});
+const skillFills = document.querySelectorAll(".skill-fill");    
+
+if ("IntersectionObserver" in window) {    
+    const skillsObserver = new IntersectionObserver(    
+        (entries, observer) => {    
+            entries.forEach((entry) => {    
+                if (entry.isIntersecting) {    
+                    entry.target.classList.add("animate");    
+                    observer.unobserve(entry.target);    
+                }    
+            });    
+        },    
+        {    
+            threshold: 0.4    
+        }    
+    );    
+
+    skillFills.forEach((fill) => {    
+        skillsObserver.observe(fill);    
+    });    
+} else {    
+    skillFills.forEach((fill) => {    
+        fill.classList.add("animate");    
+    });    
+}    
+
+/* =========================    
+   MESSAGE STORAGE HELPERS    
+========================= */    
+
+function getSavedMessages() {    
+    try {    
+        const storedMessages = localStorage.getItem(STORAGE_KEY);    
+
+        if (!storedMessages) {    
+            return [];    
+        }    
+
+        const parsedMessages = JSON.parse(storedMessages);    
+
+        if (!Array.isArray(parsedMessages)) {    
+            return [];    
+        }    
+
+        return parsedMessages.filter((message) => {    
+            return (    
+                message &&    
+                typeof message.name === "string" &&    
+                typeof message.message === "string" &&    
+                typeof message.date === "string"    
+            );    
+        });    
+    } catch (error) {    
+        console.error("Unable to read saved messages:", error);    
+        return [];    
+    }    
+}    
+
+function saveMessages(messages) {    
+    try {    
+        localStorage.setItem(    
+            STORAGE_KEY,    
+            JSON.stringify(messages)    
+        );    
+
+        return true;    
+    } catch (error) {    
+        console.error("Unable to save messages:", error);    
+        return false;    
+    }    
+}    
+
+/* =========================    
+   MESSAGE STATUS    
+========================= */    
+
+function showFormStatus(message, isError = false) {    
+    formStatus.textContent = message;    
+
+    formStatus.classList.add("show");    
+    formStatus.classList.toggle("error", isError);    
+}    
+
+/* =========================    
+   FORMAT DATE    
+========================= */    
+
+function formatDate(dateString) {    
+    const date = new Date(dateString);    
+
+    if (Number.isNaN(date.getTime())) {    
+        return "Date unavailable";    
+    }    
+
+    return date.toLocaleString(undefined, {    
+        year: "numeric",    
+        month: "short",    
+        day: "numeric",    
+        hour: "numeric",    
+        minute: "2-digit"    
+    });    
+}    
+
+/* =========================    
+   RENDER MESSAGE RECORDS    
+========================= */    
+
+function renderMessages() {    
+    const messages = getSavedMessages();    
+
+    messageCount.textContent = String(messages.length);    
+
+    messageRecords.replaceChildren();    
+
+    if (messages.length === 0) {    
+        const emptyState = document.createElement("div");    
+        emptyState.className = "empty-records";    
+
+        const icon = document.createElement("i");    
+        icon.className = "fa-regular fa-envelope-open";    
+
+        const text = document.createElement("p");    
+        text.textContent = "No messages have been saved yet.";    
+
+        emptyState.append(icon, text);    
+        messageRecords.appendChild(emptyState);    
+
+        return;    
+    }    
+
+    messages.forEach((message) => {    
+        const record = document.createElement("article");    
+        record.className = "message-record";    
+
+        const top = document.createElement("div");    
+        top.className = "record-top";    
+
+        const name = document.createElement("strong");    
+        name.className = "record-name";    
+
+        // Keep user-provided text as text, not executable HTML.    
+        name.textContent = message.name;    
+
+        const date = document.createElement("time");    
+        date.className = "record-date";    
+        date.dateTime = message.date;    
+        date.textContent = formatDate(message.date);    
+
+        const content = document.createElement("p");    
+        content.className = "record-message";    
+        content.textContent = message.message;    
+
+        top.append(name, date);    
+        record.append(top, content);    
+
+        messageRecords.appendChild(record);    
+    });    
+}    
+
+/* =========================    
+   SUBMIT CONTACT FORM    
+========================= */    
+
+contactForm.addEventListener("submit", (event) => {    
+    event.preventDefault();    
+
+    const name = visitorName.value.trim();    
+    const message = visitorMessage.value.trim();    
+
+    if (!name || !message) {    
+        showFormStatus(    
+            "Please enter your name and a message.",    
+            true    
+        );    
+
+        return;    
+    }    
+
+    if (name.length > 80) {    
+        showFormStatus(    
+            "Your name must be 80 characters or fewer.",    
+            true    
+        );    
+
+        return;    
+    }    
+
+    if (message.length > 2000) {    
+        showFormStatus(    
+            "Your message must be 2,000 characters or fewer.",    
+            true    
+        );    
+
+        return;    
+    }    
+
+    submitButton.disabled = true;    
+
+    const originalButtonContent = submitButton.innerHTML;    
+
+    submitButton.innerHTML =    
+        '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';    
+
+    const messages = getSavedMessages();    
+
+    const newMessage = {    
+        name: name,    
+        message: message,    
+        date: new Date().toISOString()    
+    };    
+
+    messages.unshift(newMessage);    
+
+    const savedSuccessfully = saveMessages(messages);    
+
+    submitButton.disabled = false;    
+    submitButton.innerHTML = originalButtonContent;    
+
+    if (!savedSuccessfully) {    
+        showFormStatus(    
+            "Unable to save this message. Check your browser's storage settings and available space.",    
+            true    
+        );    
+
+        return;    
+    }    
+
+    contactForm.reset();    
+
+    showFormStatus(    
+        "Your message was saved in this browser successfully."    
+    );    
+
+    renderMessages();    
+
+    // Scroll to the records so the new entry is visible.    
+    document.getElementById("messages").scrollIntoView({    
+        behavior: "smooth",    
+        block: "start"    
+    });    
+});    
+
+/* =========================    
+   INITIALIZE WEBSITE    
+   No clear-all functionality    
+========================= */    
+
+renderMessages();
 
 
     </script>
