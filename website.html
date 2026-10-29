@@ -2597,7 +2597,11 @@
                             in this browser's local storage.
                         </p>
 
-                        <form id="contactForm">
+                        <form
+ id="contactForm"
+    action="https://formspree.io/f/xzeevyro"
+    method="POST"
+>
 
                             <div class="form-group">
                                 <label for="visitorName">Your Name</label>
@@ -2636,64 +2640,100 @@
 
         </section>
 
-        <!-- SAVED MESSAGE RECORDS -->
-        <section class="message-records-section" id="messages">
+        <div class="contact-form-card reveal">
 
-            <div class="container">
+    <h3>Send Me a Message</h3>
 
-                <div class="records-panel reveal">
+    <p>
+        Have a question, idea, or project in mind?
+        Fill out the form below and I'll receive your message by email.
+    </p>
 
-                    <div class="records-header">
+    <form
+        id="contactForm"
+        action="https://formspree.io/f/YOUR_FORM_ID"
+        method="POST"
+    >
 
-                        <h3>
-                            <i class="fa-regular fa-message" style="color: var(--cyan);"></i>
-                            Saved Message Records
+        <div class="form-group">
+            <label for="visitorName">Your Name</label>
 
-                            <span class="message-count" id="messageCount">0</span>
-                        </h3>
-
-                    </div>
-
-                    <div class="message-records" id="messageRecords" aria-live="polite">
-                        <div class="empty-records">
-                            <i class="fa-regular fa-envelope-open"></i>
-                            <p>No messages have been saved yet.</p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-
-        <div class="footer-content">
-
-            <a href="#home" class="footer-brand">
-                BRIT<span>.</span>
-            </a>
-
-            <p>
-                &copy; <span id="currentYear"></span>
-                Hillary Ace P. Brit. All rights reserved.
-            </p>
-
-            <a href="#home" class="back-to-top" aria-label="Back to top">
-                <i class="fa-solid fa-arrow-up"></i>
-            </a>
-
+            <input
+                type="text"
+                class="form-control"
+                id="visitorName"
+                name="name"
+                placeholder="Enter your full name"
+                maxlength="80"
+                autocomplete="name"
+                required
+            >
         </div>
 
-    </footer>
+        <div class="form-group">
+            <label for="visitorEmail">Your Email</label>
 
-    <!-- JAVASCRIPT -->
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <input
+                type="email"
+                class="form-control"
+                id="visitorEmail"
+                name="email"
+                placeholder="Enter your email address"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="visitorSubject">Subject</label>
+
+            <input
+                type="text"
+                class="form-control"
+                id="visitorSubject"
+                name="subject"
+                placeholder="What is your message about?"
+                maxlength="120"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="visitorMessage">Your Message</label>
+
+            <textarea
+                class="form-control"
+                id="visitorMessage"
+                name="message"
+                placeholder="Write your message here..."
+                maxlength="2000"
+                required
+            ></textarea>
+        </div>
+
+        <!-- Optional: helps identify which website received the message -->
+        <input
+            type="hidden"
+            name="_subject"
+            value="New message from BRIT Personal Portfolio"
+        >
+
+        <button type="submit" class="btn btn-primary" id="submitButton">
+            <i class="fa-regular fa-paper-plane"></i>
+            Send Message
+        </button>
+
+        <p class="privacy-note">
+            <i class="fa-solid fa-shield-halved"></i>
+            Your message will be submitted securely through Formspree
+            and delivered according to your Formspree email settings.
+        </p>
+
+    </form>
+
+</div>
+
+<!-- JAVASCRIPT -->
 
 <script>
 "use strict";
@@ -2713,33 +2753,8 @@ const navigationAnchors = document.querySelectorAll(
 );
 
 const contactForm = document.getElementById("contactForm");
-const visitorName = document.getElementById("visitorName");
-const visitorMessage = document.getElementById("visitorMessage");
-
-const formStatus = document.getElementById("formStatus");
 const submitButton = document.getElementById("submitButton");
-
-const messageRecords = document.getElementById("messageRecords");
-const messageCount = document.getElementById("messageCount");
-
 const currentYear = document.getElementById("currentYear");
-
-/* =========================
-   SUPABASE CONFIGURATION
-========================= */
-
-const SUPABASE_URL =
-    "https://wenacoauupntcibktlnn.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_E--bsNDYFameta87reBjiA_3F8o9Jhl";
-
-const supabaseClient = window.supabase
-    ? window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    )
-    : null;
 
 /* =========================
    FOOTER YEAR
@@ -2946,275 +2961,70 @@ if ("IntersectionObserver" in window) {
 }
 
 /* =========================
-   MESSAGE STATUS
+   CONTACT FORM
 ========================= */
 
-function showFormStatus(message, isError = false) {
-    if (!formStatus) return;
+if (contactForm && submitButton) {
+    contactForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-    formStatus.textContent = message;
-    formStatus.classList.add("show");
+        const originalButtonHTML = submitButton.innerHTML;
 
-    formStatus.classList.toggle("error", isError);
-}
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending...";
 
-/* =========================
-   FORMAT DATE
-========================= */
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-
-    if (Number.isNaN(date.getTime())) {
-        return "Date unavailable";
-    }
-
-    return date.toLocaleString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit"
-    });
-}
-
-/* =========================
-   RENDER EMPTY MESSAGE STATE
-========================= */
-
-function renderEmptyMessages(message) {
-    if (!messageRecords) return;
-
-    messageRecords.replaceChildren();
-
-    const emptyState = document.createElement("div");
-    emptyState.className = "empty-records";
-
-    const icon = document.createElement("i");
-    icon.className = "fa-regular fa-envelope-open";
-
-    const text = document.createElement("p");
-    text.textContent = message;
-
-    emptyState.append(icon, text);
-    messageRecords.appendChild(emptyState);
-}
-
-/* =========================
-   LOAD MESSAGES FROM SUPABASE
-========================= */
-
-async function renderMessages() {
-    if (!messageRecords || !messageCount) {
-        console.error(
-            "Message display elements were not found."
-        );
-        return;
-    }
-
-    if (!supabaseClient) {
-        messageCount.textContent = "—";
-
-        renderEmptyMessages(
-            "Message service is unavailable."
-        );
-
-        console.error(
-            "Supabase library failed to load."
-        );
-
-        return;
-    }
-
-    messageCount.textContent = "…";
-
-    try {
-        const { data, error } = await supabaseClient
-            .from("portfolio_messages")
-            .select("id, name, message, created_at")
-            .order("created_at", {
-                ascending: false
+        try {
+            const response = await fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: {
+                    "Accept": "application/json"
+                }
             });
 
-        if (error) {
-            throw error;
-        }
-
-        messageCount.textContent = String(data.length);
-
-        messageRecords.replaceChildren();
-
-        if (data.length === 0) {
-            renderEmptyMessages(
-                "No messages have been saved yet."
-            );
-            return;
-        }
-
-        data.forEach((item) => {
-            const record =
-                document.createElement("article");
-
-            record.className = "message-record";
-
-            const top = document.createElement("div");
-            top.className = "record-top";
-
-            const name = document.createElement("strong");
-            name.className = "record-name";
-            name.textContent = item.name;
-
-            const date = document.createElement("time");
-            date.className = "record-date";
-            date.dateTime = item.created_at;
-            date.textContent = formatDate(item.created_at);
-
-            const content = document.createElement("p");
-            content.className = "record-message";
-            content.textContent = item.message;
-
-            top.append(name, date);
-            record.append(top, content);
-
-            messageRecords.appendChild(record);
-        });
-    } catch (error) {
-        console.error(
-            "Unable to load messages from Supabase:",
-            error
-        );
-
-        messageCount.textContent = "—";
-
-        renderEmptyMessages(
-            "Unable to load messages. Please try again later."
-        );
-    }
-}
-
-/* =========================
-   SUBMIT CONTACT FORM
-========================= */
-
-if (
-    contactForm &&
-    visitorName &&
-    visitorMessage &&
-    submitButton
-) {
-    contactForm.addEventListener(
-        "submit",
-        async (event) => {
-            event.preventDefault();
-
-            const name = visitorName.value.trim();
-            const message = visitorMessage.value.trim();
-
-            if (!name || !message) {
-                showFormStatus(
-                    "Please enter your name and a message.",
-                    true
-                );
-                return;
-            }
-
-            if (name.length > 80) {
-                showFormStatus(
-                    "Your name must be 80 characters or fewer.",
-                    true
-                );
-                return;
-            }
-
-            if (message.length > 2000) {
-                showFormStatus(
-                    "Your message must be 2,000 characters or fewer.",
-                    true
-                );
-                return;
-            }
-
-            if (!supabaseClient) {
-                showFormStatus(
-                    "The message service is unavailable. Please try again later.",
-                    true
-                );
-                return;
-            }
-
-            const originalButtonContent =
-                submitButton.innerHTML;
-
-            submitButton.disabled = true;
-
-            submitButton.innerHTML =
-                '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-
-            try {
-                const { error } = await supabaseClient
-                    .from("portfolio_messages")
-                    .insert([
-                        {
-                            name: name,
-                            message: message
-                        }
-                    ]);
-
-                if (error) {
-                    throw error;
-                }
-
+            if (response.ok) {
                 contactForm.reset();
 
-                showFormStatus(
-                    "Your message was saved successfully!"
-                );
+                let status = document.getElementById("formStatus");
 
-                await renderMessages();
-
-                const messagesSection =
-                    document.getElementById("messages");
-
-                if (messagesSection) {
-                    messagesSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
+                if (!status) {
+                    status = document.createElement("p");
+                    status.id = "formStatus";
+                    status.setAttribute("role", "status");
+                    contactForm.appendChild(status);
                 }
-            } catch (error) {
-                console.error(
-                    "Unable to save message to Supabase:",
-                    error
-                );
 
-                showFormStatus(
-                    "Your message could not be saved. Please try again.",
-                    true
-                );
-            } finally {
-                submitButton.disabled = false;
+                status.textContent =
+                    "Thank you! Your message has been sent successfully.";
 
-                submitButton.innerHTML =
-                    originalButtonContent;
+                status.classList.add("show");
+                status.classList.remove("error");
+            } else {
+                throw new Error("Form submission failed.");
             }
+        } catch (error) {
+            console.error("Contact form error:", error);
+
+            let status = document.getElementById("formStatus");
+
+            if (!status) {
+                status = document.createElement("p");
+                status.id = "formStatus";
+                status.setAttribute("role", "alert");
+                contactForm.appendChild(status);
+            }
+
+            status.textContent =
+                "Sorry, your message could not be sent. Please try again later.";
+
+            status.classList.add("show", "error");
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonHTML;
         }
-    );
-} else {
-    console.error(
-        "Contact form elements were not found. Check your HTML IDs."
-    );
+    });
 }
-
-/* =========================
-   INITIALIZE MESSAGE SYSTEM
-========================= */
-
-// Load saved database messages when the website opens.
-// No localStorage is used for message storage.
-renderMessages();
-
 </script>
-    
+
 </body>
-    
 </html>
